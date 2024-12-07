@@ -162,25 +162,12 @@ hr {
   gap: 0.2rem;
 }
 
-.current-day {
-  font-size: 1.5rem;
-}
-
-.current-day,
-.total-amount {
-  font-weight: 700;
-}
-
 .total-container {
   display: flex;
   flex-direction: column;
   align-items: end;
   margin-bottom: 1rem;
   margin-top: 1rem;
-}
-
-.total-amount {
-  font-size: 2rem;
 }
 
 .body-text {
