@@ -47,6 +47,7 @@ hr {
   padding: 1rem;
   box-sizing: border-box;
   border-radius: 4px;
+  height: 4rem;
 }
 
 .container {
@@ -91,6 +92,10 @@ hr {
 
 .btn-add span {
   display: none;
+}
+
+.btn-add:hover {
+  background-color: rgb(114, 36, 198);
 }
 
 @media (max-width: 767px) {
@@ -144,6 +149,11 @@ hr {
 .btn-edit {
   border: none;
   background-color: transparent;
+}
+
+.btn-edit:hover,
+.btn-nav:hover {
+  background-color: rgba(150, 147, 147, 0.1);
 }
 
 .date-container {
@@ -212,6 +222,8 @@ hr {
   padding: 0.5rem;
   margin: 0.5rem;
   border-radius: 50%;
+  height: 2.5rem;
+  width: 2.5rem;
 }
 
 .btn-edit svg {
