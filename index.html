@@ -13,6 +13,30 @@
     />
   </head>
   <body>
+    <dialog id="form-modal">
+      <form>
+        <button class="btn btn-close-modal" type="button">
+          <span>&times;</span>
+        </button>
+        <h2>New Expense</h2>
+
+        <div class="form-fields">
+          <label htmlFor="amount"
+            >Amount (USD):<input name="amount" type="number" placeholder="0.00"
+          /></label>
+
+          <label htmlFor="date"
+            >Expense Date:<input name="date" type="date"
+          /></label>
+          <label htmlFor="category"
+            >Category:<input name="category" type="text"
+          /></label>
+        </div>
+
+        <button class="btn btn-submit-form"><span>Add</span></button>
+      </form>
+    </dialog>
+
     <div class="nav-bar">
       <h2 class="logo">spendwise</h2>
       <button class="btn btn-add">
@@ -50,8 +74,8 @@
           </svg>
         </button>
         <div class="date-text">
-          <h3>Tuesday</h3>
-          <p class="body-text">September 3, 2024</p>
+          <h3 id="current-day">Tuesday</h3>
+          <p id="current-date" class="body-text">September 3, 2024</p>
         </div>
         <button class="btn btn-nav">
           <svg
@@ -70,7 +94,7 @@
         </button>
       </div>
       <div class="total-container">
-        <h1>$177.00</h1>
+        <h1 id="running-total">$177.00</h1>
         <p class="body-text">total spending</p>
       </div>
       <div class="controls">
@@ -91,7 +115,6 @@
           </svg>
           <span>Filter</span>
         </button>
-
         <button class="btn btn-control">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -107,108 +130,11 @@
               d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
             />
           </svg>
-
           <span>View</span>
         </button>
       </div>
-      <ul>
-        <li>
-          <div class="expense-item">
-            <p class="body-text">Food</p>
-            <div class="expense-amount">
-              <span>$75.00</span>
-              <button class="btn btn-edit">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <hr />
-        </li>
-        <li>
-          <div class="expense-item">
-            <p class="body-text">Food</p>
-            <div class="expense-amount">
-              <span>$75.00</span>
-              <button class="btn btn-edit">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <hr />
-        </li>
-        <li>
-          <div class="expense-item">
-            <p class="body-text">Food</p>
-            <div class="expense-amount">
-              <span>$75.00</span>
-              <button class="btn btn-edit">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <hr />
-        </li>
-        <li>
-          <div class="expense-item">
-            <p class="body-text">Food</p>
-            <div class="expense-amount">
-              <span>$75.00</span>
-              <button class="btn btn-edit">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <hr />
-        </li>
-      </ul>
+      <ul id="expense-list"></ul>
     </div>
   </body>
+  <script src="index.js"></script>
 </html>
