@@ -1,16 +1,53 @@
 class App {
   constructor() {
-    this.#init();
-
     this.openModal = document.querySelector(".btn-add");
     this.closeModal = document.querySelector(".btn-close-modal");
     this.modal = document.getElementById("form-modal");
+    this.form = document.getElementById("new-expense");
+    this.total = document.getElementById("running-total");
+
+    this.sampleExpenses = [
+      { amount: 150, category: "Food" },
+      { amount: 50, category: "Clothes" },
+      { amount: 20, category: "Travel" },
+      { amount: 15, category: "Food" },
+    ];
 
     this.openModal.addEventListener("click", this.#handleOpenModal.bind(this));
     this.closeModal.addEventListener(
       "click",
       this.#handleCloseModal.bind(this)
     );
+    this.form.addEventListener("submit", this.#handleSubmit.bind(this));
+
+    this.#init();
+  }
+
+  #handleSubmit(e) {
+    const form = e.target;
+    const formData = new FormData(form).entries();
+    const jsonData = Object.fromEntries(formData);
+    const { amount, date, category } = jsonData;
+
+    const locale = navigator.language;
+
+    const key = new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(date));
+
+    let expensesPrev = JSON.parse(localStorage.getItem(key));
+
+    if (expensesPrev) {
+      expensesPrev.push({ amount, category });
+      localStorage.setItem(key, JSON.stringify(expensesPrev));
+    } else {
+      localStorage.setItem(key, JSON.stringify([{ amount, category }]));
+    }
+
+    form.reset();
   }
 
   #handleClickOutside(e) {
@@ -20,6 +57,21 @@ class App {
   }
 
   #handleOpenModal() {
+    const locale = navigator.language;
+    const maxYear = new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+    }).format(new Date());
+    const maxMonth = new Intl.DateTimeFormat(locale, {
+      month: "numeric",
+    }).format(new Date());
+    const maxDay = new Intl.DateTimeFormat(locale, {
+      day: "numeric",
+    }).format(new Date());
+
+    document
+      .getElementById("date-input")
+      .setAttribute("max", `${maxYear}-${maxMonth}-${maxDay}`);
+
     this.modal.showModal();
     this.modal.addEventListener("click", this.#handleClickOutside.bind(this));
   }
@@ -58,37 +110,31 @@ class App {
       day: "numeric",
     }).format(new Date());
 
-    let initialExpenses = [
-      { amount: 150.0, category: "Food" },
-      { amount: 50.0, category: "Clothes" },
-      { amount: 20.0, category: "Travel" },
-      { amount: 15.0, category: "Food" },
-    ];
-
-    const value = { [key]: initialExpenses };
-    localStorage.setItem("expenses", JSON.stringify(value));
+    localStorage.setItem(key, JSON.stringify(this.sampleExpenses));
 
     this.#setExpenses(key);
   }
 
   #getExpenses(dateStr) {
-    const expenses = JSON.parse(localStorage.getItem("expenses"));
+    const expenses = JSON.parse(localStorage.getItem(dateStr));
 
-    if (expenses[dateStr]) {
-      return expenses[dateStr];
+    if (expenses && expenses.length) {
+      return expenses;
     } else {
-      console.log("No expenses");
       return [];
     }
   }
 
   #setExpenses(dateStr) {
-    let list = this.#getExpenses(dateStr);
+    let expenses = this.#getExpenses(dateStr);
 
-    let listEl = document.getElementById("expense-list");
+    let list = document.getElementById("expense-list");
 
-    list.forEach(({ amount, category }, idx) => {
-      listEl.insertAdjacentHTML(
+    let total = 0;
+    expenses.forEach(({ amount, category }, idx) => {
+      total += amount;
+
+      list.insertAdjacentHTML(
         "afterbegin",
         `<li>
          <div class="expense-item">
@@ -116,6 +162,8 @@ class App {
         </li>`
       );
     });
+
+    this.total.textContent = `$${total.toFixed(2)}`;
   }
 }
 
