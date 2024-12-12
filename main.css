@@ -183,6 +183,10 @@ hr {
     transition: none;
   }
 
+  .expense-amount {
+    margin-right: 1rem;
+  }
+
   .expense-item:hover .btn-edit {
     display: block;
   }
