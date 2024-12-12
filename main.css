@@ -63,11 +63,13 @@ form h2 {
   gap: 1rem;
 }
 
-input {
-  width: 7rem;
+input,
+select {
+  width: 10rem;
   border-radius: 4px;
   border: 1px solid;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
 }
 
 ul {

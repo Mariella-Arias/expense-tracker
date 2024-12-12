@@ -14,7 +14,7 @@
   </head>
   <body>
     <dialog id="form-modal">
-      <form>
+      <form id="new-expense" method="dialog">
         <button class="btn btn-close-modal" type="button">
           <span>&times;</span>
         </button>
@@ -22,15 +22,34 @@
 
         <div class="form-fields">
           <label htmlFor="amount"
-            >Amount (USD):<input name="amount" type="number" placeholder="0.00"
-          /></label>
-
+            >Amount (USD):<input
+              name="amount"
+              type="number"
+              placeholder="0.00"
+              min="0"
+              step="0.01"
+              autofocus
+              required
+            />
+          </label>
           <label htmlFor="date"
-            >Expense Date:<input name="date" type="date"
+            >Expense Date:<input
+              id="date-input"
+              name="date"
+              type="date"
+              required
           /></label>
           <label htmlFor="category"
-            >Category:<input name="category" type="text"
-          /></label>
+            >Category:
+            <select name="category" required>
+              <option value="" disabled selected hidden>Select</option>
+              <option value="essentials">Essentials</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="payments">Payments</option>
+              <option value="wellness">Wellness</option>
+              <option value="miscelanous">Miscelanous</option>
+            </select></label
+          >
         </div>
 
         <button class="btn btn-submit-form"><span>Add</span></button>
@@ -94,7 +113,7 @@
         </button>
       </div>
       <div class="total-container">
-        <h1 id="running-total">$177.00</h1>
+        <h1 id="running-total"><span>$</span>0.00</h1>
         <p class="body-text">total spending</p>
       </div>
       <div class="controls">
