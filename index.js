@@ -7,6 +7,8 @@ class App {
     this.total = document.getElementById("running-total");
     this.datePicker = document.getElementById("date-picker");
     this.currentDate = document.getElementById("selected-date");
+    this.prevDate = document.getElementById("nav-prev");
+    this.nextDay = document.getElementById("nav-fwd");
 
     this.sampleExpenses = [
       { amount: 150, category: "Food" },
@@ -26,6 +28,8 @@ class App {
     );
 
     this.datePicker.addEventListener("change", this.#updateExpenses.bind(this));
+    this.prevDate.addEventListener("click", this.#goBackOne.bind(this));
+    this.nextDay.addEventListener("click", this.#goForwardOne.bind(this));
 
     this.#init();
   }
@@ -116,6 +120,7 @@ class App {
     this.#updateExpenses();
   }
 
+  // dateStr: string, 'month/day/fullYear'
   #getExpenses(dateStr) {
     const expenses = JSON.parse(localStorage.getItem(dateStr));
 
@@ -152,7 +157,7 @@ class App {
 
     let total = 0;
 
-    // Clear any elements that may already be contained in the list
+    // Clear any elements that may already be in the list
     while (list.firstChild) {
       list.removeChild(list.firstChild);
     }
@@ -201,6 +206,87 @@ class App {
     }
 
     this.total.textContent = `$${Number(total).toFixed(2)}`;
+  }
+
+  #goBackOne() {
+    let [year, monthIndex, day] = this.currentDate.value.split("-");
+
+    let yesterday = new Date(Number(year), Number(monthIndex) - 1, Number(day));
+    yesterday.setDate(yesterday.getDate() - 1);
+    console.log("Yesterday: ", yesterday);
+    const locale = navigator.language;
+    const prevYear = new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+    }).format(new Date(yesterday));
+    let prevMonth = new Intl.DateTimeFormat(locale, {
+      month: "numeric",
+    }).format(new Date(yesterday));
+    let prevDay = new Intl.DateTimeFormat(locale, {
+      day: "numeric",
+    }).format(new Date(yesterday));
+
+    if (prevMonth < 10) {
+      prevMonth = "0" + prevMonth;
+    }
+
+    if (prevDay < 10) {
+      prevDay = "0" + prevDay;
+    }
+
+    this.currentDate.setAttribute(
+      "value",
+      `${prevYear}-${prevMonth}-${prevDay}`
+    );
+    this.#updateExpenses();
+  }
+
+  #goForwardOne() {
+    const [year, monthIndex, day] = this.currentDate.value.split("-");
+
+    const tomorrow = new Date(
+      Number(year),
+      Number(monthIndex) - 1,
+      Number(day)
+    );
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const [maxYear, maxMonthIndex, maxDay] = this.currentDate.max.split("-");
+
+    const max = new Date(
+      Number(maxYear),
+      Number(maxMonthIndex) - 1,
+      Number(maxDay)
+    );
+
+    if (tomorrow > max) {
+      return;
+    }
+
+    const locale = navigator.language;
+    const nextYear = new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+    }).format(new Date(tomorrow));
+    let nextMonth = new Intl.DateTimeFormat(locale, {
+      month: "numeric",
+    }).format(new Date(tomorrow));
+    let nextDay = new Intl.DateTimeFormat(locale, {
+      day: "numeric",
+    }).format(new Date(tomorrow));
+
+    if (nextMonth < 10) {
+      nextMonth = "0" + nextMonth;
+    }
+
+    if (nextDay < 10) {
+      nextDay = "0" + nextDay;
+    }
+
+    this.currentDate.setAttribute(
+      "value",
+      `${nextYear}-${nextMonth}-${nextDay}`
+    );
+
+    this.#updateExpenses();
   }
 }
 
