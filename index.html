@@ -76,7 +76,7 @@
       </button>
     </div>
     <div class="container">
-      <div class="date-container">
+      <form id="date-picker" class="date-picker">
         <button class="btn btn-nav">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -92,10 +92,7 @@
             />
           </svg>
         </button>
-        <div class="date-text">
-          <h3 id="current-day">Tuesday</h3>
-          <p id="current-date" class="body-text">September 3, 2024</p>
-        </div>
+        <input id="selected-date" type="date" name="date" />
         <button class="btn btn-nav">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +108,8 @@
             />
           </svg>
         </button>
-      </div>
+      </form>
+
       <div class="total-container">
         <h1 id="running-total"><span>$</span>0.00</h1>
         <p class="body-text">total spending</p>

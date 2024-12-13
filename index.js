@@ -3,8 +3,10 @@ class App {
     this.openModal = document.querySelector(".btn-add");
     this.closeModal = document.querySelector(".btn-close-modal");
     this.modal = document.getElementById("form-modal");
-    this.form = document.getElementById("new-expense");
+    this.newExpenseForm = document.getElementById("new-expense");
     this.total = document.getElementById("running-total");
+    this.datePicker = document.getElementById("date-picker");
+    this.currentDate = document.getElementById("selected-date");
 
     this.sampleExpenses = [
       { amount: 150, category: "Food" },
@@ -18,7 +20,12 @@ class App {
       "click",
       this.#handleCloseModal.bind(this)
     );
-    this.form.addEventListener("submit", this.#handleSubmit.bind(this));
+    this.newExpenseForm.addEventListener(
+      "submit",
+      this.#handleSubmit.bind(this)
+    );
+
+    this.datePicker.addEventListener("change", this.#updateExpenses.bind(this));
 
     this.#init();
   }
@@ -47,6 +54,10 @@ class App {
       localStorage.setItem(key, JSON.stringify([{ amount, category }]));
     }
 
+    if (date === this.currentDate.value) {
+      this.#updateExpenses();
+    }
+
     form.reset();
   }
 
@@ -58,6 +69,7 @@ class App {
 
   #handleOpenModal() {
     const locale = navigator.language;
+
     const maxYear = new Intl.DateTimeFormat(locale, {
       year: "numeric",
     }).format(new Date());
@@ -72,6 +84,10 @@ class App {
       .getElementById("date-input")
       .setAttribute("max", `${maxYear}-${maxMonth}-${maxDay}`);
 
+    document
+      .getElementById("date-input")
+      .setAttribute("value", this.currentDate.value);
+
     this.modal.showModal();
     this.modal.addEventListener("click", this.#handleClickOutside.bind(this));
   }
@@ -82,38 +98,22 @@ class App {
   }
 
   #init() {
-    const dayFormatOptions = {
-      weekday: "long",
-    };
-
-    const dateFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-
     const locale = navigator.language;
-    const currentDay = new Intl.DateTimeFormat(locale, dayFormatOptions).format(
-      new Date()
-    );
-    const currentDate = new Intl.DateTimeFormat(
-      locale,
-      dateFormatOptions
-    ).format(new Date());
-
-    document.getElementById("current-day").textContent = currentDay;
-    document.getElementById("current-date").textContent = currentDate;
-
-    const key = new Intl.DateTimeFormat(locale, {
+    const year = new Intl.DateTimeFormat(locale, {
       year: "numeric",
+    }).format(new Date());
+    const month = new Intl.DateTimeFormat(locale, {
       month: "numeric",
+    }).format(new Date());
+    const day = new Intl.DateTimeFormat(locale, {
       day: "numeric",
     }).format(new Date());
 
-    // localStorage.setItem(key, JSON.stringify(this.sampleExpenses));
+    this.currentDate.setAttribute("value", `${year}-${month}-${day}`);
+    this.currentDate.setAttribute("max", `${year}-${month}-${day}`);
 
     // Set today's expenses
-    this.#setExpenses(key);
+    this.#updateExpenses();
   }
 
   #getExpenses(dateStr) {
@@ -126,23 +126,50 @@ class App {
     }
   }
 
-  #setExpenses(dateStr) {
-    let expenses = this.#getExpenses(dateStr);
+  #updateExpenses(e) {
+    const locale = navigator.language;
+    let key;
 
-    let list = document.getElementById("expense-list");
+    if (e) {
+      key = new Intl.DateTimeFormat(locale, {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        timeZone: "UTC",
+      }).format(new Date(e.target.value));
+    } else {
+      key = new Intl.DateTimeFormat(locale, {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        timeZone: "UTC",
+      }).format(new Date(this.currentDate.value));
+    }
+
+    const expenses = this.#getExpenses(key);
+
+    const list = document.getElementById("expense-list");
 
     let total = 0;
+
+    // Clear any elements that may already be contained in the list
+    while (list.firstChild) {
+      list.removeChild(list.firstChild);
+    }
+
     if (expenses.length) {
       expenses.forEach(({ amount, category }, idx) => {
-        total += amount;
+        total += Number(amount);
 
         list.insertAdjacentHTML(
           "afterbegin",
           `<li>
            <div class="expense-item">
-             <p class="body-text">${category}</p>
+             <p class="body-text">${
+               category.charAt(0).toUpperCase() + category.slice(1)
+             }</p>
              <div class="expense-amount">
-               <span>$${amount.toFixed(2)}</span>
+               <span>$${Number(amount).toFixed(2)}</span>
                <button class="btn btn-edit">
                  <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -173,7 +200,7 @@ class App {
       );
     }
 
-    this.total.textContent = `$${total.toFixed(2)}`;
+    this.total.textContent = `$${Number(total).toFixed(2)}`;
   }
 }
 
