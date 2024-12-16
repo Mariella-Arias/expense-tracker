@@ -9,13 +9,7 @@ class App {
     this.currentDate = document.getElementById("selected-date");
     this.prevDate = document.getElementById("nav-prev");
     this.nextDay = document.getElementById("nav-fwd");
-
-    this.sampleExpenses = [
-      { amount: 150, category: "Food" },
-      { amount: 50, category: "Clothes" },
-      { amount: 20, category: "Travel" },
-      { amount: 15, category: "Food" },
-    ];
+    this.expenses = [];
 
     this.openModal.addEventListener("click", this.#handleOpenModal.bind(this));
     this.closeModal.addEventListener(
@@ -26,7 +20,10 @@ class App {
       "submit",
       this.#handleSubmit.bind(this)
     );
-    this.datePicker.addEventListener("change", this.#updateExpenses.bind(this));
+    this.datePicker.addEventListener(
+      "change",
+      this.#handleDateChange.bind(this)
+    );
     this.prevDate.addEventListener("click", this.#goBackOne.bind(this));
     this.nextDay.addEventListener("click", this.#goForwardOne.bind(this));
 
@@ -58,7 +55,7 @@ class App {
     }
 
     if (date === this.currentDate.value) {
-      this.#updateExpenses();
+      this.#refreshContent();
     }
 
     form.reset();
@@ -102,6 +99,7 @@ class App {
   }
 
   #init() {
+    // Get today's date
     const locale = navigator.language;
     const year = new Intl.DateTimeFormat(locale, {
       year: "numeric",
@@ -116,43 +114,35 @@ class App {
     this.currentDate.setAttribute("value", `${year}-${month}-${day}`);
     this.currentDate.setAttribute("max", `${year}-${month}-${day}`);
 
-    // Set today's expenses
-    this.#updateExpenses();
+    const key = new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      timeZone: "UTC",
+    }).format(new Date());
+
+    // Set expenses
+    this.expenses = JSON.parse(localStorage.getItem(key)) || [];
+
+    this.#refreshContent();
   }
 
-  // dateStr: string, 'month/day/fullYear'
-  #getExpenses(dateStr) {
-    const expenses = JSON.parse(localStorage.getItem(dateStr));
-
-    if (expenses && expenses.length) {
-      return expenses;
-    } else {
-      return [];
-    }
-  }
-
-  #updateExpenses(e) {
+  #handleDateChange(e) {
     const locale = navigator.language;
-    let key;
 
-    if (e) {
-      key = new Intl.DateTimeFormat(locale, {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-        timeZone: "UTC",
-      }).format(new Date(e.target.value));
-    } else {
-      key = new Intl.DateTimeFormat(locale, {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-        timeZone: "UTC",
-      }).format(new Date(this.currentDate.value));
-    }
+    let key = new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(e.target.value));
 
-    const expenses = this.#getExpenses(key);
+    this.expenses = JSON.parse(localStorage.getItem(key)) || [];
 
+    this.#refreshContent();
+  }
+
+  #refreshContent() {
     const list = document.getElementById("expense-list");
 
     let total = 0;
@@ -162,8 +152,8 @@ class App {
       list.removeChild(list.firstChild);
     }
 
-    if (expenses.length) {
-      expenses.forEach(({ amount, category }, idx) => {
+    if (this.expenses.length) {
+      this.expenses.forEach(({ amount, category }, idx) => {
         total += Number(amount);
 
         list.insertAdjacentHTML(
@@ -244,12 +234,10 @@ class App {
   }
 
   #deleteExpense(key, id) {
-    let expenses = JSON.parse(localStorage.getItem(key));
+    this.expenses = this.expenses.filter((_, idx) => idx !== id);
+    localStorage.setItem(key, JSON.stringify(this.expenses));
 
-    expenses = expenses.filter((_, idx) => idx !== id);
-    localStorage.setItem(key, JSON.stringify(expenses));
-
-    this.#updateExpenses();
+    this.#refreshContent();
   }
 
   #goBackOne() {
@@ -259,6 +247,7 @@ class App {
     yesterday.setDate(yesterday.getDate() - 1);
 
     const locale = navigator.language;
+
     const prevYear = new Intl.DateTimeFormat(locale, {
       year: "numeric",
     }).format(new Date(yesterday));
@@ -281,7 +270,18 @@ class App {
       "value",
       `${prevYear}-${prevMonth}-${prevDay}`
     );
-    this.#updateExpenses();
+
+    const key = new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(yesterday));
+
+    this.expenses = JSON.parse(localStorage.getItem(key)) || [];
+
+    // console.log("New date: ", `${prevYear}-${prevMonth}-${prevDay}`);
+    this.#refreshContent();
   }
 
   #goForwardOne() {
@@ -330,7 +330,16 @@ class App {
       `${nextYear}-${nextMonth}-${nextDay}`
     );
 
-    this.#updateExpenses();
+    const key = new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(tomorrow));
+
+    this.expenses = JSON.parse(localStorage.getItem(key)) || [];
+
+    this.#refreshContent();
   }
 }
 
