@@ -26,7 +26,6 @@ class App {
       "submit",
       this.#handleSubmit.bind(this)
     );
-
     this.datePicker.addEventListener("change", this.#updateExpenses.bind(this));
     this.prevDate.addEventListener("click", this.#goBackOne.bind(this));
     this.nextDay.addEventListener("click", this.#goForwardOne.bind(this));
@@ -97,6 +96,7 @@ class App {
   }
 
   #handleCloseModal() {
+    this.newExpenseForm.reset();
     this.modal.removeEventListener("click", this.#handleClickOutside);
     this.modal.close();
   }
@@ -168,33 +168,37 @@ class App {
 
         list.insertAdjacentHTML(
           "afterbegin",
-          `<li>
+          `<li id="expense-${idx}">
            <div class="expense-item">
              <p class="body-text">${
                category.charAt(0).toUpperCase() + category.slice(1)
              }</p>
              <div class="expense-amount">
                <span>$${Number(amount).toFixed(2)}</span>
-               <button class="btn btn-edit">
-                 <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                    />
-                   </svg>
+               <button id="expense-options-${idx}" class="btn btn-options">
+               <svg
+               xmlns="http://www.w3.org/2000/svg"
+               fill="none"
+               viewBox="0 0 24 24"
+               stroke-width="1.5"
+               stroke="currentColor"
+               >
+               <path
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+               />
+               </svg>
                </button>
              </div>
           </div>
           <hr />
           </li>`
         );
+
+        document
+          .querySelector(".btn-options")
+          .addEventListener("click", this.#expenseOptions.bind(this, idx));
       });
     } else {
       list.insertAdjacentHTML(
@@ -208,12 +212,52 @@ class App {
     this.total.textContent = `$${Number(total).toFixed(2)}`;
   }
 
+  #expenseOptions(id) {
+    const btn = document.getElementById(`expense-options-${id}`);
+
+    btn.insertAdjacentHTML(
+      "beforebegin",
+      `<div id="tooltip-edit" class="tooltip-edit">
+        <button class="btn btn-edit">Edit</button>
+        <button class="btn btn-delete">Delete</button>
+       </div>`
+    );
+
+    document
+      .getElementById("tooltip-edit")
+      .addEventListener("mouseleave", () =>
+        document.getElementById("tooltip-edit").remove()
+      );
+
+    const locale = navigator.language;
+
+    const key = new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(this.currentDate.value));
+
+    document
+      .querySelector(".btn-delete")
+      .addEventListener("click", this.#deleteExpense.bind(this, key, id));
+  }
+
+  #deleteExpense(key, id) {
+    let expenses = JSON.parse(localStorage.getItem(key));
+
+    expenses = expenses.filter((_, idx) => idx !== id);
+    localStorage.setItem(key, JSON.stringify(expenses));
+
+    this.#updateExpenses();
+  }
+
   #goBackOne() {
     let [year, monthIndex, day] = this.currentDate.value.split("-");
 
     let yesterday = new Date(Number(year), Number(monthIndex) - 1, Number(day));
     yesterday.setDate(yesterday.getDate() - 1);
-    console.log("Yesterday: ", yesterday);
+
     const locale = navigator.language;
     const prevYear = new Intl.DateTimeFormat(locale, {
       year: "numeric",
