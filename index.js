@@ -1,6 +1,6 @@
 class App {
   constructor() {
-    this.openModal = document.querySelector(".btn-add");
+    this.openModal = document.querySelector(".btn-add-expense");
     this.closeModal = document.querySelector(".btn-close-modal");
     this.modal = document.getElementById("form-modal");
     this.newExpenseForm = document.getElementById("new-expense");
@@ -257,31 +257,33 @@ class App {
     li.insertAdjacentHTML(
       "afterbegin",
       `<form id="editable-row" class="form-edit">
-             <select name="category" required>
-                <option value="" disabled selected hidden>Select</option>
-                <option value="essentials">Essentials</option>
-                <option value="entertainment">Entertainment</option>
-                <option value="payments">Payments</option>
-                <option value="wellness">Wellness</option>
-                <option value="miscellanous">Miscellanous</option>
-              </select>
-              <div class="edit-amount">
-              <span>$</span>
-              <input
-              name="amount"
-              type="number"
-              placeholder="0.00"
-              min="0"
-              step="0.01"
-              autofocus
-              required
-              />
-              <button id="update-expense" type="submit" class="btn-update">Save</button>
-              </div>
-              </form>`
+         <select name="category" required>
+           <option value="" disabled selected hidden>Select</option>
+           <option value="essentials">Essentials</option>
+           <option value="entertainment">Entertainment</option>
+           <option value="payments">Payments</option>
+           <option value="wellness">Wellness</option>
+           <option value="miscellanous">Miscellanous</option>
+         </select>
+         <div class="new-expense-amount">
+           <span>$</span>
+           <input
+             name="amount"
+             type="number"
+             placeholder="0.00"
+             min="0"
+             step="0.01"
+             required
+            />
+           <button id="update-expense" type="submit" class="btn btn-update">Save</button>
+         </div>
+        </form>`
     );
 
     const editableRow = document.getElementById("editable-row");
+
+    const selectElement = editableRow.querySelector("select");
+    selectElement.focus();
 
     editableRow.addEventListener("submit", (e) => {
       this.#handleExpenseChange.call(this, e, id);
@@ -313,7 +315,7 @@ class App {
       }
     }
 
-    const editAmount = document.querySelector(".edit-amount");
+    const editAmount = document.querySelector(".new-expense-amount");
 
     for (const child of editAmount.childNodes) {
       if (child.tagName === "INPUT") {
