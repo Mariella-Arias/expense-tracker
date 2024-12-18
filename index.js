@@ -256,7 +256,7 @@ class App {
 
     li.insertAdjacentHTML(
       "afterbegin",
-      `<form id="edit-expense" class="form-edit">
+      `<form id="edit-expense" class="editable-row">
            <select name="category" required>
              <option value="" disabled selected hidden>Select</option>
              <option value="essentials">Essentials</option>

@@ -229,10 +229,8 @@ hr {
   margin-top: 1rem;
 }
 
-/* !  */
-
 .body-text,
-.form-edit select {
+.editable-row select {
   color: rgb(92, 92, 92);
   font-weight: 300;
 }
@@ -318,7 +316,7 @@ hr {
   align-items: center;
 }
 
-.form-edit {
+.editable-row {
   position: absolute;
   display: flex;
   height: 100%;
@@ -330,7 +328,7 @@ hr {
   padding: 0.5rem 0rem 0.5rem 1rem;
 }
 
-.form-edit select {
+.editable-row select {
   border: none;
   min-width: 7rem;
   font-style: italic;
@@ -350,7 +348,7 @@ hr {
 }
 
 .new-expense-amount input:focus-visible,
-.form-edit select:focus-visible {
+.editable-row select:focus-visible {
   outline: 2px solid rgb(150, 52, 255, 0.5);
   border-radius: 4px;
 }
