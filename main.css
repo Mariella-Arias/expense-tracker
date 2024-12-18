@@ -89,6 +89,7 @@ ul::-webkit-scrollbar {
 li {
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 hr {
@@ -228,7 +229,8 @@ hr {
   margin-top: 1rem;
 }
 
-.body-text {
+.body-text,
+.form-edit select {
   color: rgb(92, 92, 92);
   font-weight: 300;
 }
@@ -272,7 +274,6 @@ hr {
   border-radius: 50%;
   height: 2.5rem;
   width: 2.5rem;
-  position: relative;
 }
 
 .btn-options svg {
@@ -282,7 +283,6 @@ hr {
 
 .tooltip-edit {
   position: absolute;
-  z-index: 2;
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -290,7 +290,7 @@ hr {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   border-bottom-left-radius: 8px;
-  transform: translate(0%, -50%);
+  transform: translate(-100%, -100%);
   box-shadow: 0px 2px 4px rgba(150, 147, 147, 0.5);
 }
 
@@ -318,4 +318,56 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.form-edit {
+  position: absolute;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  justify-content: space-between;
+  border: 3px solid rgb(53, 140, 255);
+  box-sizing: border-box;
+  padding: 0.5rem 0rem 0.5rem 1rem;
+}
+
+.form-edit select {
+  border: none;
+  width: 9rem;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.edit-amount input {
+  border: none;
+  width: 6rem;
+}
+
+.edit-amount input,
+.edit-amount span {
+  font-size: 1.5rem;
+  font-style: italic;
+}
+
+.edit-amount input:focus-visible,
+.form-edit select:focus {
+  outline: none;
+}
+
+.edit-amount {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.btn-update {
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem;
+  background-color: rgb(53, 140, 255);
+  color: white;
+  font-weight: 600;
+  margin: 0.5rem;
 }

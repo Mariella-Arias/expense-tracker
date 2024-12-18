@@ -45,17 +45,14 @@ class App {
       timeZone: "UTC",
     }).format(new Date(date));
 
-    let expensesPrev = JSON.parse(localStorage.getItem(key));
-
-    if (expensesPrev) {
-      expensesPrev.push({ amount, category });
-      localStorage.setItem(key, JSON.stringify(expensesPrev));
-    } else {
-      localStorage.setItem(key, JSON.stringify([{ amount, category }]));
-    }
-
     if (date === this.currentDate.value) {
+      this.expenses.push({ amount, category });
+      localStorage.setItem(key, JSON.stringify(this.expenses));
       this.#refreshContent();
+    } else {
+      let expensesFromStore = JSON.parse(localStorage.getItem(key));
+      expensesFromStore.push({ amount, category });
+      localStorage.setItem(key, expensesFromStore);
     }
 
     form.reset();
@@ -118,7 +115,6 @@ class App {
       year: "numeric",
       month: "numeric",
       day: "numeric",
-      timeZone: "UTC",
     }).format(new Date());
 
     // Set expenses
@@ -162,7 +158,8 @@ class App {
            <div class="expense-item">
              <p class="body-text">${
                category.charAt(0).toUpperCase() + category.slice(1)
-             }</p>
+             }
+             </p>
              <div class="expense-amount">
                <span>$${Number(amount).toFixed(2)}</span>
                <button id="expense-options-${idx}" class="btn btn-options">
@@ -186,9 +183,15 @@ class App {
           </li>`
         );
 
-        document
-          .querySelector(".btn-options")
-          .addEventListener("click", this.#expenseOptions.bind(this, idx));
+        const btnOpenTooltip = document.querySelector(".btn-options");
+        btnOpenTooltip.addEventListener("click", (e) => {
+          this.#openTooltip.call(this, e, idx);
+
+          setTimeout(() => {
+            const tooltip = document.getElementById(`tooltip-${idx}`);
+            if (tooltip) tooltip.remove();
+          }, 4000);
+        });
       });
     } else {
       list.insertAdjacentHTML(
@@ -202,22 +205,116 @@ class App {
     this.total.textContent = `$${Number(total).toFixed(2)}`;
   }
 
-  #expenseOptions(id) {
-    const btn = document.getElementById(`expense-options-${id}`);
-
-    btn.insertAdjacentHTML(
-      "beforebegin",
-      `<div id="tooltip-edit" class="tooltip-edit">
+  #openTooltip(e, id) {
+    document.querySelector("body").insertAdjacentHTML(
+      "beforeend",
+      `<div id="tooltip-${id}" class="tooltip-edit">
         <button class="btn btn-edit">Edit</button>
         <button class="btn btn-delete">Delete</button>
        </div>`
     );
 
+    const tooltip = document.getElementById(`tooltip-${id}`);
+    tooltip.style.left = `${e.clientX}px`;
+    tooltip.style.top = `${e.clientY}px`;
+
     document
-      .getElementById("tooltip-edit")
+      .getElementById(`tooltip-${id}`)
       .addEventListener("mouseleave", () =>
-        document.getElementById("tooltip-edit").remove()
+        document.getElementById(`tooltip-${id}`).remove()
       );
+
+    document
+      .getElementById(`tooltip-${id}`)
+      .addEventListener("click", () =>
+        document.getElementById(`tooltip-${id}`).remove()
+      );
+
+    document
+      .querySelector(".btn-delete")
+      .addEventListener("click", this.#deleteExpense.bind(this, id));
+    document
+      .querySelector(".btn-edit")
+      .addEventListener("click", this.#editRow.bind(this, id));
+  }
+
+  #editRow(id) {
+    const li = document.getElementById(`expense-${id}`);
+
+    li.insertAdjacentHTML(
+      "afterbegin",
+      `<form id="editable-row" class="form-edit">
+           <select name="category" required>
+              <option value="" disabled selected hidden>Select</option>
+              <option value="essentials">Essentials</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="payments">Payments</option>
+              <option value="wellness">Wellness</option>
+              <option value="miscellanous">Miscellanous</option>
+            </select>
+            <div class="edit-amount">
+            <span>$</span>
+            <input
+            name="amount"
+            type="number"
+            placeholder="0.00"
+            min="0"
+            step="0.01"
+            autofocus
+            required
+            />
+            <button id="update-expense" type="submit" class="btn-update">Save</button>
+            </div>
+            </form>`
+    );
+
+    const editForm = document.getElementById("editable-row");
+
+    editForm.addEventListener("submit", (e) =>
+      this.#handleExpenseChange.call(this, e, id)
+    );
+
+    setTimeout(() => {
+      const handleOutsideClick = (e) => {
+        if (editForm && !editForm.contains(e.target)) {
+          editForm.remove();
+          window.removeEventListener("click", handleOutsideClick);
+        }
+      };
+
+      window.addEventListener("click", handleOutsideClick);
+    }, 0);
+
+    for (const child of editForm.childNodes) {
+      if (child.tagName === "SELECT") {
+        for (const option of child.options) {
+          if (option.getAttribute("value") === this.expenses[id].category) {
+            option.setAttribute("selected", "");
+          }
+        }
+      }
+    }
+
+    const editAmount = document.querySelector(".edit-amount");
+
+    for (const child of editAmount.childNodes) {
+      if (child.tagName === "INPUT") {
+        child.setAttribute(
+          "value",
+          Number(this.expenses[id].amount).toFixed(2)
+        );
+      }
+    }
+  }
+
+  #handleExpenseChange(e, id) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form).entries();
+    const jsonData = Object.fromEntries(formData);
+
+    this.expenses[id] = { ...jsonData };
 
     const locale = navigator.language;
 
@@ -228,13 +325,23 @@ class App {
       timeZone: "UTC",
     }).format(new Date(this.currentDate.value));
 
-    document
-      .querySelector(".btn-delete")
-      .addEventListener("click", this.#deleteExpense.bind(this, key, id));
+    localStorage.setItem(key, JSON.stringify(this.expenses));
+
+    this.#refreshContent();
   }
 
-  #deleteExpense(key, id) {
+  #deleteExpense(id) {
     this.expenses = this.expenses.filter((_, idx) => idx !== id);
+
+    const locale = navigator.language;
+
+    const key = new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(this.currentDate.value));
+
     localStorage.setItem(key, JSON.stringify(this.expenses));
 
     this.#refreshContent();
@@ -280,7 +387,6 @@ class App {
 
     this.expenses = JSON.parse(localStorage.getItem(key)) || [];
 
-    // console.log("New date: ", `${prevYear}-${prevMonth}-${prevDay}`);
     this.#refreshContent();
   }
 
