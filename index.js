@@ -216,34 +216,38 @@ class App {
 
     const handleOutsideClick = (e) => {
       if (tooltip && !tooltip.contains(e.target)) {
-        tooltip.remove();
-        window.removeEventListener("click", handleOutsideClick);
+        cleanTooltip();
       }
+    };
+
+    const cleanTooltip = () => {
+      if (tooltip) tooltip.remove();
+      window.removeEventListener("click", handleOutsideClick);
     };
 
     window.addEventListener("click", handleOutsideClick);
 
     document
       .getElementById(`tooltip-${id}`)
-      .addEventListener("mouseleave", () =>
-        document.getElementById(`tooltip-${id}`).remove()
-      );
+      .addEventListener("mouseleave", () => {
+        cleanTooltip();
+      });
 
-    document
-      .getElementById(`tooltip-${id}`)
-      .addEventListener("click", () =>
-        document.getElementById(`tooltip-${id}`).remove()
-      );
+    document.getElementById(`tooltip-${id}`).addEventListener("click", (e) => {
+      e.stopPropagation();
+      cleanTooltip();
+    });
 
     document
       .querySelector(".btn-delete")
       .addEventListener("click", this.#deleteExpense.bind(this, id));
+
     document
       .querySelector(".btn-edit")
-      .addEventListener("click", this.#editRow.bind(this, id));
+      .addEventListener("click", this.#insertEditableRow.bind(this, id));
   }
 
-  #editRow(id) {
+  #insertEditableRow(id) {
     const li = document.getElementById(`expense-${id}`);
 
     li.insertAdjacentHTML(
@@ -273,24 +277,29 @@ class App {
             </form>`
     );
 
-    const editForm = document.getElementById("editable-row");
+    const editableRow = document.getElementById("editable-row");
 
-    editForm.addEventListener("submit", (e) =>
-      this.#handleExpenseChange.call(this, e, id)
-    );
+    editableRow.addEventListener("submit", (e) => {
+      this.#handleExpenseChange.call(this, e, id);
+      cleanEditableRow();
+    });
 
-    setTimeout(() => {
-      const handleOutsideClick = (e) => {
-        if (editForm && !editForm.contains(e.target)) {
-          editForm.remove();
-          window.removeEventListener("click", handleOutsideClick);
-        }
-      };
+    const cleanEditableRow = () => {
+      if (editableRow) {
+        editableRow.remove();
+      }
+      window.removeEventListener("click", handleOutsideClick);
+    };
 
-      window.addEventListener("click", handleOutsideClick);
-    }, 0);
+    const handleOutsideClick = (e) => {
+      if (editableRow && !editableRow.contains(e.target)) {
+        cleanEditableRow();
+      }
+    };
 
-    for (const child of editForm.childNodes) {
+    window.addEventListener("click", handleOutsideClick);
+
+    for (const child of editableRow.childNodes) {
       if (child.tagName === "SELECT") {
         for (const option of child.options) {
           if (option.getAttribute("value") === this.expenses[id].category) {
