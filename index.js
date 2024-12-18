@@ -18,7 +18,7 @@ class App {
     );
     this.newExpenseForm.addEventListener(
       "submit",
-      this.#handleSubmit.bind(this)
+      this.#handleCreateExpense.bind(this)
     );
     this.datePicker.addEventListener(
       "change",
@@ -30,7 +30,7 @@ class App {
     this.#init();
   }
 
-  #handleSubmit(e) {
+  #handleCreateExpense(e) {
     const form = e.target;
     const formData = new FormData(form).entries();
     const jsonData = Object.fromEntries(formData);
@@ -58,7 +58,7 @@ class App {
     form.reset();
   }
 
-  #handleClickOutside(e) {
+  #handleClickOutsideModal(e) {
     if (e.target === this.modal) {
       this.#handleCloseModal();
     }
@@ -86,12 +86,15 @@ class App {
       .setAttribute("value", this.currentDate.value);
 
     this.modal.showModal();
-    this.modal.addEventListener("click", this.#handleClickOutside.bind(this));
+    this.modal.addEventListener(
+      "click",
+      this.#handleClickOutsideModal.bind(this)
+    );
   }
 
   #handleCloseModal() {
     this.newExpenseForm.reset();
-    this.modal.removeEventListener("click", this.#handleClickOutside);
+    this.modal.removeEventListener("click", this.#handleClickOutsideModal);
     this.modal.close();
   }
 
