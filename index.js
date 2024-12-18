@@ -162,7 +162,7 @@ class App {
              </p>
              <div class="expense-amount">
                <span>$${Number(amount).toFixed(2)}</span>
-               <button id="expense-options-${idx}" class="btn btn-options">
+               <button id="expense-options-${idx}" class="btn btn-open-tooltip">
                <svg
                xmlns="http://www.w3.org/2000/svg"
                fill="none"
@@ -183,14 +183,10 @@ class App {
           </li>`
         );
 
-        const btnOpenTooltip = document.querySelector(".btn-options");
+        const btnOpenTooltip = document.querySelector(".btn-open-tooltip");
         btnOpenTooltip.addEventListener("click", (e) => {
+          e.stopPropagation();
           this.#openTooltip.call(this, e, idx);
-
-          setTimeout(() => {
-            const tooltip = document.getElementById(`tooltip-${idx}`);
-            if (tooltip) tooltip.remove();
-          }, 4000);
         });
       });
     } else {
@@ -208,7 +204,7 @@ class App {
   #openTooltip(e, id) {
     document.querySelector("body").insertAdjacentHTML(
       "beforeend",
-      `<div id="tooltip-${id}" class="tooltip-edit">
+      `<div id="tooltip-${id}" class="tooltip">
         <button class="btn btn-edit">Edit</button>
         <button class="btn btn-delete">Delete</button>
        </div>`
@@ -217,6 +213,15 @@ class App {
     const tooltip = document.getElementById(`tooltip-${id}`);
     tooltip.style.left = `${e.clientX}px`;
     tooltip.style.top = `${e.clientY}px`;
+
+    const handleOutsideClick = (e) => {
+      if (tooltip && !tooltip.contains(e.target)) {
+        tooltip.remove();
+        window.removeEventListener("click", handleOutsideClick);
+      }
+    };
+
+    window.addEventListener("click", handleOutsideClick);
 
     document
       .getElementById(`tooltip-${id}`)
