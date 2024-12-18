@@ -256,31 +256,31 @@ class App {
 
     li.insertAdjacentHTML(
       "afterbegin",
-      `<form id="editable-row" class="form-edit">
-         <select name="category" required>
-           <option value="" disabled selected hidden>Select</option>
-           <option value="essentials">Essentials</option>
-           <option value="entertainment">Entertainment</option>
-           <option value="payments">Payments</option>
-           <option value="wellness">Wellness</option>
-           <option value="miscellanous">Miscellanous</option>
-         </select>
-         <div class="new-expense-amount">
-           <span>$</span>
-           <input
-             name="amount"
-             type="number"
-             placeholder="0.00"
-             min="0"
-             step="0.01"
-             required
-            />
-           <button id="update-expense" type="submit" class="btn btn-update">Save</button>
-         </div>
-        </form>`
+      `<form id="edit-expense" class="form-edit">
+           <select name="category" required>
+             <option value="" disabled selected hidden>Select</option>
+             <option value="essentials">Essentials</option>
+             <option value="entertainment">Entertainment</option>
+             <option value="payments">Payments</option>
+             <option value="wellness">Wellness</option>
+             <option value="miscellanous">Miscellanous</option>
+           </select>
+           <div class="new-expense-amount">
+             <span>$</span>
+             <input
+               name="amount"
+               type="number"
+               placeholder="0.00"
+               min="0"
+               step="0.01"
+               required
+              />
+             <button id="update-expense" type="submit" class="btn btn-update">Save</button>
+           </div>
+          </form>`
     );
 
-    const editableRow = document.getElementById("editable-row");
+    const editableRow = document.getElementById("edit-expense");
 
     const selectElement = editableRow.querySelector("select");
     selectElement.focus();
