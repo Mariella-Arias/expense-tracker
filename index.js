@@ -155,37 +155,36 @@ class App {
         list.insertAdjacentHTML(
           "afterbegin",
           `<li id="expense-${idx}">
-           <div class="expense-item">
-             <p class="body-text">${
-               category.charAt(0).toUpperCase() + category.slice(1)
-             }
-             </p>
-             <div class="expense-amount">
-               <span>$${Number(amount).toFixed(2)}</span>
-               <button id="expense-options-${idx}" class="btn btn-open-tooltip">
-               <svg
-               xmlns="http://www.w3.org/2000/svg"
-               fill="none"
-               viewBox="0 0 24 24"
-               stroke-width="1.5"
-               stroke="currentColor"
-               >
-               <path
-               stroke-linecap="round"
-               stroke-linejoin="round"
-               d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-               />
-               </svg>
-               </button>
-             </div>
-          </div>
-          <hr />
-          </li>`
+             <div class="expense-item">
+               <p class="body-text">${
+                 category.charAt(0).toUpperCase() + category.slice(1)
+               }
+               </p>
+               <div class="expense-amount">
+                 <span>$${Number(amount).toFixed(2)}</span>
+                 <button id="expense-options-${idx}" class="btn btn-open-tooltip">
+                 <svg
+                 xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke-width="1.5"
+                 stroke="currentColor"
+                 >
+                 <path
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                 />
+                 </svg>
+                 </button>
+               </div>
+            </div>
+            <hr />
+            </li>`
         );
 
         const btnOpenTooltip = document.querySelector(".btn-open-tooltip");
         btnOpenTooltip.addEventListener("click", (e) => {
-          e.stopPropagation();
           this.#openTooltip.call(this, e, idx);
         });
       });
@@ -193,8 +192,8 @@ class App {
       list.insertAdjacentHTML(
         "afterbegin",
         ` <div class="empty-list">
-          <span>No expenses on this date</span>
-        </div>`
+            <span>No expenses on this date</span>
+          </div>`
       );
     }
 
@@ -205,9 +204,9 @@ class App {
     document.querySelector("body").insertAdjacentHTML(
       "beforeend",
       `<div id="tooltip-${id}" class="tooltip">
-        <button class="btn btn-edit">Edit</button>
-        <button class="btn btn-delete">Delete</button>
-       </div>`
+          <button class="btn btn-edit">Edit</button>
+          <button class="btn btn-delete">Delete</button>
+         </div>`
     );
 
     const tooltip = document.getElementById(`tooltip-${id}`);
@@ -225,7 +224,9 @@ class App {
       window.removeEventListener("click", handleOutsideClick);
     };
 
-    window.addEventListener("click", handleOutsideClick);
+    setTimeout(() => {
+      window.addEventListener("click", handleOutsideClick);
+    }, 0);
 
     document
       .getElementById(`tooltip-${id}`)
@@ -253,28 +254,28 @@ class App {
     li.insertAdjacentHTML(
       "afterbegin",
       `<form id="editable-row" class="form-edit">
-           <select name="category" required>
-              <option value="" disabled selected hidden>Select</option>
-              <option value="essentials">Essentials</option>
-              <option value="entertainment">Entertainment</option>
-              <option value="payments">Payments</option>
-              <option value="wellness">Wellness</option>
-              <option value="miscellanous">Miscellanous</option>
-            </select>
-            <div class="edit-amount">
-            <span>$</span>
-            <input
-            name="amount"
-            type="number"
-            placeholder="0.00"
-            min="0"
-            step="0.01"
-            autofocus
-            required
-            />
-            <button id="update-expense" type="submit" class="btn-update">Save</button>
-            </div>
-            </form>`
+             <select name="category" required>
+                <option value="" disabled selected hidden>Select</option>
+                <option value="essentials">Essentials</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="payments">Payments</option>
+                <option value="wellness">Wellness</option>
+                <option value="miscellanous">Miscellanous</option>
+              </select>
+              <div class="edit-amount">
+              <span>$</span>
+              <input
+              name="amount"
+              type="number"
+              placeholder="0.00"
+              min="0"
+              step="0.01"
+              autofocus
+              required
+              />
+              <button id="update-expense" type="submit" class="btn-update">Save</button>
+              </div>
+              </form>`
     );
 
     const editableRow = document.getElementById("editable-row");
@@ -288,16 +289,16 @@ class App {
       if (editableRow) {
         editableRow.remove();
       }
-      window.removeEventListener("click", handleOutsideClick);
+      window.removeEventListener("click", removeEditableRow);
     };
 
-    const handleOutsideClick = (e) => {
+    const removeEditableRow = (e) => {
       if (editableRow && !editableRow.contains(e.target)) {
         cleanEditableRow();
       }
     };
 
-    window.addEventListener("click", handleOutsideClick);
+    window.addEventListener("click", removeEditableRow);
 
     for (const child of editableRow.childNodes) {
       if (child.tagName === "SELECT") {
