@@ -9,6 +9,15 @@ class App {
     this.currentDate = document.getElementById("selected-date");
     this.prevDate = document.getElementById("nav-prev");
     this.nextDay = document.getElementById("nav-fwd");
+    this.filterButton = document.getElementById("filter-button");
+    this.activeFilters = {
+      entertainment: false,
+      essentials: false,
+      miscellanous: false,
+      payments: false,
+      wellness: false,
+    };
+
     this.expenses = [];
 
     this.openModal.addEventListener("click", this.#handleOpenModal.bind(this));
@@ -26,8 +35,109 @@ class App {
     );
     this.prevDate.addEventListener("click", this.#goBackOne.bind(this));
     this.nextDay.addEventListener("click", this.#goForwardOne.bind(this));
-
+    this.filterButton.addEventListener(
+      "click",
+      this.#toggleFilterDropdown.bind(this)
+    );
     this.#init();
+  }
+
+  #toggleFilterDropdown(e) {
+    e.stopPropagation();
+
+    const dropdownPrev = document.getElementById("filters");
+
+    if (dropdownPrev) {
+      dropdownPrev.remove();
+      // TODO: remove click event listener from window
+    } else {
+      const dropdown = `<form id="filters" class="filter-options">   
+      <label htmlFor="payments">
+      <span>Payments</span>
+              <input type="checkbox" name="payments" />
+            </label>
+          
+            <label htmlFor="essentials">
+            <span>Essentials</span>
+              <input type="checkbox" name="essentials" />
+            </label>
+       
+            <label htmlFor="entertainment">
+            <span>Entertainment</span>
+              <input type="checkbox" name="entertainment"/>
+            </label>
+      
+            <label htmlFor="wellness">
+            <span>Wellness</span>
+              <input type="checkbox" name="wellness"/>
+            </label>
+         
+            <label htmlFor="miscellanous">
+            <span>Miscellanous</span>
+              <input type="checkbox" name="miscellanous"/>
+            </label>
+  
+            <button id="clear-filters" type="button" class="btn btn-clear"><span>clear</span></button> 
+          </form>`;
+
+      this.filterButton.insertAdjacentHTML("afterend", dropdown);
+      const clear = document.getElementById("clear-filters");
+      const form = document.getElementById("filters");
+
+      form.addEventListener("change", (e) => {
+        this.activeFilters[e.target.name] = e.target.checked;
+
+        const activeFilters = Object.values(this.activeFilters).reduce(
+          (acc, curr) => acc + (curr ? 1 : 0),
+          0
+        );
+
+        if (activeFilters) {
+          document
+            .getElementById("filter-button")
+            .classList.remove("btn-filter");
+          document
+            .getElementById("filter-button")
+            .classList.add("btn-filter-active");
+        } else {
+          document
+            .getElementById("filter-button")
+            .classList.remove("btn-filter-active");
+          document.getElementById("filter-button").classList.add("btn-filter");
+        }
+        this.#refreshContent();
+      });
+
+      const cleanDropdown = () => {
+        if (form) form.remove();
+        window.removeEventListener("click", handleOutsideClick);
+      };
+
+      const handleOutsideClick = (e) => {
+        if (!form.contains(e.target)) {
+          cleanDropdown();
+        }
+      };
+
+      setTimeout(() => {
+        window.addEventListener("click", handleOutsideClick);
+      }, 0);
+
+      clear.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        for (const filter in this.activeFilters) {
+          this.activeFilters[filter] = false;
+        }
+        this.#refreshContent();
+        cleanDropdown();
+        
+        document
+          .getElementById("filter-button")
+          .classList.remove("btn-filter-active");
+        document.getElementById("filter-button").classList.add("btn-filter");
+      });
+    }
   }
 
   #handleCreateExpense(e) {
@@ -146,6 +256,11 @@ class App {
 
     let total = 0;
 
+    const activeFilters = Object.values(this.activeFilters).reduce(
+      (acc, curr) => acc + (curr ? 1 : 0),
+      0
+    );
+
     // Clear any elements that may already be in the list
     while (list.firstChild) {
       list.removeChild(list.firstChild);
@@ -153,43 +268,85 @@ class App {
 
     if (this.expenses.length) {
       this.expenses.forEach(({ amount, category }, idx) => {
-        total += Number(amount);
+        if (activeFilters) {
+          if (this.activeFilters[category]) {
+            total += Number(amount);
 
-        list.insertAdjacentHTML(
-          "afterbegin",
-          `<li id="expense-${idx}">
-             <div class="expense-item">
-               <p class="body-text">${
-                 category.charAt(0).toUpperCase() + category.slice(1)
-               }
-               </p>
-               <div class="expense-amount">
-                 <span>$${Number(amount).toFixed(2)}</span>
-                 <button id="expense-options-${idx}" class="btn btn-open-tooltip">
-                 <svg
-                 xmlns="http://www.w3.org/2000/svg"
-                 fill="none"
-                 viewBox="0 0 24 24"
-                 stroke-width="1.5"
-                 stroke="currentColor"
-                 >
-                 <path
-                 stroke-linecap="round"
-                 stroke-linejoin="round"
-                 d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                 />
-                 </svg>
-                 </button>
-               </div>
-            </div>
-            <hr />
-            </li>`
-        );
+            list.insertAdjacentHTML(
+              "afterbegin",
+              `<li id="expense-${idx}">
+                 <div class="expense-item">
+                   <p class="body-text">${
+                     category.charAt(0).toUpperCase() + category.slice(1)
+                   }
+                   </p>
+                   <div class="expense-amount">
+                     <span>$${Number(amount).toFixed(2)}</span>
+                     <button id="expense-options-${idx}" class="btn btn-open-tooltip">
+                     <svg
+                     xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke-width="1.5"
+                     stroke="currentColor"
+                     >
+                     <path
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                     />
+                     </svg>
+                     </button>
+                   </div>
+                </div>
+                <hr />
+                </li>`
+            );
 
-        const btnOpenTooltip = document.querySelector(".btn-open-tooltip");
-        btnOpenTooltip.addEventListener("click", (e) => {
-          this.#openTooltip.call(this, e, idx);
-        });
+            const btnOpenTooltip = document.querySelector(".btn-open-tooltip");
+            btnOpenTooltip.addEventListener("click", (e) => {
+              this.#openTooltip.call(this, e, idx);
+            });
+          }
+        } else {
+          total += Number(amount);
+
+          list.insertAdjacentHTML(
+            "afterbegin",
+            `<li id="expense-${idx}">
+               <div class="expense-item">
+                 <p class="body-text">${
+                   category.charAt(0).toUpperCase() + category.slice(1)
+                 }
+                 </p>
+                 <div class="expense-amount">
+                   <span>$${Number(amount).toFixed(2)}</span>
+                   <button id="expense-options-${idx}" class="btn btn-open-tooltip">
+                   <svg
+                   xmlns="http://www.w3.org/2000/svg"
+                   fill="none"
+                   viewBox="0 0 24 24"
+                   stroke-width="1.5"
+                   stroke="currentColor"
+                   >
+                   <path
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                   />
+                   </svg>
+                   </button>
+                 </div>
+              </div>
+              <hr />
+              </li>`
+          );
+
+          const btnOpenTooltip = document.querySelector(".btn-open-tooltip");
+          btnOpenTooltip.addEventListener("click", (e) => {
+            this.#openTooltip.call(this, e, idx);
+          });
+        }
       });
     } else {
       list.insertAdjacentHTML(

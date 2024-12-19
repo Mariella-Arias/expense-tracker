@@ -97,6 +97,10 @@ hr {
   border: 0.5px solid;
 }
 
+.logo {
+  color: rgb(150, 52, 255);
+}
+
 .nav-bar,
 .container {
   background-color: white;
@@ -122,10 +126,6 @@ hr {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-}
-
-.logo {
-  color: rgb(150, 52, 255);
 }
 
 .btn {
@@ -162,6 +162,7 @@ hr {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
+    z-index: 999;
   }
 }
 
@@ -235,19 +236,94 @@ hr {
   font-weight: 300;
 }
 
-.btn-control {
+.btn-filter {
   gap: 0.3rem;
-  border: 0.5px solid rgb(231, 231, 231);
-  border-radius: 4px;
-  background-color: transparent;
-  padding: 1rem;
-  margin: 0.5rem;
+  border: 1px solid rgb(231, 231, 231);
+  border-radius: 8px;
+  background-color: rgb(231, 231, 231, 0.5);
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  color: rgb(92, 92, 92);
+  font-weight: 400;
+}
+
+.btn-filter svg,
+.btn-filter-active svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.btn-filter-active {
+  gap: 0.3rem;
+  border: none;
+  border-radius: 8px;
+  background-color: rgb(150, 52, 255);
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  box-shadow: 0px 2px 4px rgba(150, 147, 147, 0.5);
+  color: white;
   font-weight: 600;
 }
 
-.btn-control svg {
-  width: 1.5rem;
-  height: 1.5rem;
+.btn-filter-active svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  stroke-width: 2.2;
+}
+
+.filter {
+  position: relative;
+  align-self: self-start;
+}
+
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background-color: white;
+  border: 1px solid rgb(231, 231, 231);
+  border-radius: 8px;
+  padding: 0.5rem;
+  margin-top: 0.2rem;
+  z-index: 899;
+  box-shadow: 0px 2px 4px rgba(150, 147, 147, 0.2);
+}
+
+.filter-options span {
+  color: rgb(92, 92, 92);
+  font-weight: 300;
+  font-size: 0.9rem;
+}
+
+.filter-options input {
+  appearance: none;
+  width: 1em;
+  height: 1em;
+  background: white;
+  border-radius: 50%;
+  border: 1px solid rgb(150, 52, 255);
+  margin-left: 0.5rem;
+}
+
+.filter-options input:checked {
+  border-radius: 50%;
+  background-color: rgb(150, 52, 255);
+}
+
+.filter-options label {
+  min-width: 9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0rem;
+}
+
+.btn-clear {
+  border-radius: 8px;
+  border: none;
+  padding: 0.25rem;
+  margin: 0.25rem 0rem;
+  background-color: rgb(231, 231, 231, 0.5);
 }
 
 .expense-item {
@@ -281,7 +357,9 @@ hr {
   position: absolute;
   display: flex;
   flex-direction: column;
-  background-color: rgb(150, 52, 255);
+  /* background-color: rgb(150, 52, 255); */
+  border: 2px solid rgb(150, 52, 255);
+  background-color: white;
   padding: 0.5rem;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
@@ -298,11 +376,15 @@ hr {
   border-radius: 50px;
   font-weight: 700;
   cursor: pointer;
-  color: white;
+  /* color: white; */
+  color: rgb(150, 52, 255);
 }
 
 .tooltip button:hover {
-  background-color: rgb(114, 36, 198);
+  /* background-color: rgb(114, 36, 198); */
+  background-color: rgb(150, 52, 255);
+  color: white;
+  /* border: 2px solid rgb(150, 52, 255); */
 }
 
 .empty-list {
