@@ -43,13 +43,10 @@ class App {
   }
 
   #toggleFilterDropdown(e) {
-    e.stopPropagation();
-
     const dropdownPrev = document.getElementById("filters");
 
     if (dropdownPrev) {
       dropdownPrev.remove();
-      // TODO: remove click event listener from window
     } else {
       const dropdown = `<form id="filters" class="filter-options">   
       <label htmlFor="payments">
@@ -111,6 +108,7 @@ class App {
       const cleanDropdown = () => {
         if (form) form.remove();
         window.removeEventListener("click", handleOutsideClick);
+        window.removeEventListener("resize", cleanDropdown);
       };
 
       const handleOutsideClick = (e) => {
@@ -122,6 +120,8 @@ class App {
       setTimeout(() => {
         window.addEventListener("click", handleOutsideClick);
       }, 0);
+
+      window.addEventListener("resize", cleanDropdown);
 
       clear.addEventListener("click", (e) => {
         e.stopPropagation();
