@@ -359,8 +359,8 @@ class App {
     );
 
     const tooltip = document.getElementById(`tooltip-${id}`);
-    tooltip.style.left = `${e.clientX}px`;
-    tooltip.style.top = `${e.clientY}px`;
+    tooltip.style.left = `${e.pageX}px`;
+    tooltip.style.top = `${e.pageY}px`;
 
     const handleOutsideClick = (e) => {
       if (tooltip && !tooltip.contains(e.target)) {
