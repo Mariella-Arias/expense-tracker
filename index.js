@@ -557,10 +557,7 @@ class App {
       prevDay = "0" + prevDay;
     }
 
-    this.currentDate.setAttribute(
-      "value",
-      `${prevYear}-${prevMonth}-${prevDay}`
-    );
+    this.currentDate.value = `${prevYear}-${prevMonth}-${prevDay}`;
 
     const key = new Intl.DateTimeFormat(locale, {
       year: "numeric",
@@ -615,10 +612,7 @@ class App {
       nextDay = "0" + nextDay;
     }
 
-    this.currentDate.setAttribute(
-      "value",
-      `${nextYear}-${nextMonth}-${nextDay}`
-    );
+    this.currentDate.value = `${nextYear}-${nextMonth}-${nextDay}`;
 
     const key = new Intl.DateTimeFormat(locale, {
       year: "numeric",
