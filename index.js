@@ -48,36 +48,25 @@ class App {
     if (dropdownPrev) {
       dropdownPrev.remove();
     } else {
-      const dropdown = `<form id="filters" class="filter-options">   
-      <label htmlFor="payments">
-      <span>Payments</span>
-              <input type="checkbox" name="payments" />
-            </label>
-          
-            <label htmlFor="essentials">
-            <span>Essentials</span>
-              <input type="checkbox" name="essentials" />
-            </label>
-       
-            <label htmlFor="entertainment">
-            <span>Entertainment</span>
-              <input type="checkbox" name="entertainment"/>
-            </label>
-      
-            <label htmlFor="wellness">
-            <span>Wellness</span>
-              <input type="checkbox" name="wellness"/>
-            </label>
-         
-            <label htmlFor="miscellanous">
-            <span>Miscellanous</span>
-              <input type="checkbox" name="miscellanous"/>
-            </label>
-  
-            <button id="clear-filters" type="button" class="btn btn-clear"><span>clear</span></button> 
+      const filterOptions = Object.keys(this.activeFilters)
+        .sort()
+        .map(
+          (filter) => `<label htmlFor="${filter}">
+          <span>${filter.charAt(0).toUpperCase() + filter.slice(1)}</span>
+                  <input
+                   type="checkbox" 
+                   name="${filter}"
+                   ${this.activeFilters[filter] ? "checked" : ""}
+                  />
+                </label>`
+        )
+        .join("");
+
+      const dropdown = `<form id="filters" class="filter-options">${filterOptions}<button id="clear-filters" type="button" class="btn btn-clear"><span>Clear</span></button> 
           </form>`;
 
       this.filterButton.insertAdjacentHTML("afterend", dropdown);
+
       const clear = document.getElementById("clear-filters");
       const form = document.getElementById("filters");
 
