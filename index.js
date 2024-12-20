@@ -382,11 +382,18 @@ class App {
     const cleanTooltip = () => {
       if (tooltip) tooltip.remove();
       window.removeEventListener("click", handleOutsideClick);
+      listEl.removeEventListener("scroll", cleanTooltip);
+      window.removeEventListener("resize", cleanTooltip);
     };
 
     setTimeout(() => {
       window.addEventListener("click", handleOutsideClick);
     }, 0);
+
+    const listEl = document.getElementById("expense-list");
+
+    listEl.addEventListener("scroll", cleanTooltip);
+    window.addEventListener("resize", cleanTooltip);
 
     document
       .getElementById(`tooltip-${id}`)
