@@ -131,7 +131,7 @@ class App {
         }
         this.#refreshContent();
         cleanDropdown();
-        
+
         document
           .getElementById("filter-button")
           .classList.remove("btn-filter-active");
@@ -362,7 +362,7 @@ class App {
 
   #openTooltip(e, id) {
     document.querySelector("body").insertAdjacentHTML(
-      "beforeend",
+      "afterbegin",
       `<div id="tooltip-${id}" class="tooltip">
           <button class="btn btn-edit">Edit</button>
           <button class="btn btn-delete">Delete</button>
