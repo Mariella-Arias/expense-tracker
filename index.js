@@ -13,7 +13,7 @@ class App {
     this.activeFilters = {
       entertainment: false,
       essentials: false,
-      miscellanous: false,
+      miscellaneous: false,
       payments: false,
       wellness: false,
     };
@@ -407,20 +407,26 @@ class App {
   #insertEditableRow(id) {
     const li = document.getElementById(`expense-${id}`);
 
+    const options = Object.keys(this.activeFilters)
+      .sort()
+      .map(
+        (filter) =>
+          `<option value="${filter}" ${
+            filter === this.expenses[id].category ? "selected" : ""
+          }>${filter.charAt(0).toUpperCase() + filter.slice(1)}</option>`
+      )
+      .join("");
+
     li.insertAdjacentHTML(
       "afterbegin",
       `<form id="edit-expense" class="editable-row">
            <select name="category" required>
-             <option value="" disabled selected hidden>Select</option>
-             <option value="essentials">Essentials</option>
-             <option value="entertainment">Entertainment</option>
-             <option value="payments">Payments</option>
-             <option value="wellness">Wellness</option>
-             <option value="miscellanous">Miscellanous</option>
+            ${options}
            </select>
            <div class="new-expense-amount">
              <span>$</span>
              <input
+             value="${Number(this.expenses[id].amount).toFixed(2)}"
                name="amount"
                type="number"
                placeholder="0.00"
@@ -457,27 +463,6 @@ class App {
     };
 
     window.addEventListener("click", removeEditableRow);
-
-    for (const child of editableRow.childNodes) {
-      if (child.tagName === "SELECT") {
-        for (const option of child.options) {
-          if (option.getAttribute("value") === this.expenses[id].category) {
-            option.setAttribute("selected", "");
-          }
-        }
-      }
-    }
-
-    const editAmount = document.querySelector(".new-expense-amount");
-
-    for (const child of editAmount.childNodes) {
-      if (child.tagName === "INPUT") {
-        child.setAttribute(
-          "value",
-          Number(this.expenses[id].amount).toFixed(2)
-        );
-      }
-    }
   }
 
   #handleExpenseChange(e, id) {
