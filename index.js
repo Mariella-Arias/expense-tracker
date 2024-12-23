@@ -42,6 +42,27 @@ class App {
     this.#init();
   }
 
+  getLocalStorageKey(date = new Date()) {
+    const locale = navigator.language;
+
+    return new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    }).format(date);
+  }
+
+  getLocalStorageKeyUtc(date = new Date()) {
+    const locale = navigator.language;
+
+    return new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      timeZone: "UTC",
+    }).format(date);
+  }
+
   #init() {
     // Get today's date
     const locale = navigator.language;
@@ -58,12 +79,7 @@ class App {
     this.currentDate.setAttribute("value", `${year}-${month}-${day}`);
     this.currentDate.setAttribute("max", `${year}-${month}-${day}`);
 
-    const key = new Intl.DateTimeFormat(locale, {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-    }).format(new Date());
-
+    const key = this.getLocalStorageKey(new Date());
     // Set expenses
     this.expenses = JSON.parse(localStorage.getItem(key)) || [];
 
@@ -180,14 +196,7 @@ class App {
   }
 
   #handleDateChange(e) {
-    const locale = navigator.language;
-
-    let key = new Intl.DateTimeFormat(locale, {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      timeZone: "UTC",
-    }).format(new Date(e.target.value));
+    const key = this.getLocalStorageKeyUtc(new Date(e.target.value));
 
     this.expenses = JSON.parse(localStorage.getItem(key)) || [];
 
@@ -222,12 +231,7 @@ class App {
 
     this.currentDate.value = `${prevYear}-${prevMonth}-${prevDay}`;
 
-    const key = new Intl.DateTimeFormat(locale, {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      timeZone: "UTC",
-    }).format(new Date(yesterday));
+    const key = this.getLocalStorageKeyUtc(new Date(yesterday));
 
     this.expenses = JSON.parse(localStorage.getItem(key)) || [];
 
@@ -277,12 +281,7 @@ class App {
 
     this.currentDate.value = `${nextYear}-${nextMonth}-${nextDay}`;
 
-    const key = new Intl.DateTimeFormat(locale, {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      timeZone: "UTC",
-    }).format(new Date(tomorrow));
+    const key = this.getLocalStorageKeyUtc(new Date(tomorrow));
 
     this.expenses = JSON.parse(localStorage.getItem(key)) || [];
 
@@ -392,14 +391,7 @@ class App {
     const jsonData = Object.fromEntries(formData);
     const { amount, date, category } = jsonData;
 
-    const locale = navigator.language;
-
-    const key = new Intl.DateTimeFormat(locale, {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      timeZone: "UTC",
-    }).format(new Date(date));
+    const key = this.getLocalStorageKeyUtc(new Date(date));
 
     if (date === this.currentDate.value) {
       this.expenses.push({ amount, category });
@@ -579,14 +571,7 @@ class App {
 
     this.expenses[id] = { ...jsonData };
 
-    const locale = navigator.language;
-
-    const key = new Intl.DateTimeFormat(locale, {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      timeZone: "UTC",
-    }).format(new Date(this.currentDate.value));
+    const key = this.getLocalStorageKeyUtc(new Date(this.currentDate.value));
 
     localStorage.setItem(key, JSON.stringify(this.expenses));
 
@@ -596,14 +581,7 @@ class App {
   #deleteExpense(id) {
     this.expenses = this.expenses.filter((_, idx) => idx !== id);
 
-    const locale = navigator.language;
-
-    const key = new Intl.DateTimeFormat(locale, {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      timeZone: "UTC",
-    }).format(new Date(this.currentDate.value));
+    const key = this.getLocalStorageKeyUtc(new Date(this.currentDate.value));
 
     localStorage.setItem(key, JSON.stringify(this.expenses));
 
