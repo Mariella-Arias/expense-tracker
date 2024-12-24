@@ -1,0 +1,481 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Nunito Sans", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  font-size: 16px;
+}
+
+body {
+  min-height: 100vh;
+  background-color: rgb(228, 228, 228);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+dialog {
+  align-self: center;
+  justify-self: center;
+  background-color: white;
+  border: none;
+  box-shadow: 3px 3px 4px 2px rgb(217, 217, 217);
+  border-radius: 4px;
+}
+
+dialog form {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+form h2 {
+  margin-bottom: 2rem;
+  align-self: center;
+}
+
+.btn-submit-expense {
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem;
+  background-color: rgb(150, 52, 255);
+  color: white;
+  font-weight: 600;
+  width: 100%;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-fields > * {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+}
+
+dialog input,
+dialog select {
+  width: 10rem;
+  border-radius: 4px;
+  border: 1px solid;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+ul {
+  margin-top: 1rem;
+  list-style-type: none;
+  height: 100%;
+  overflow: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hides scrollbar in Chrome browsers */
+ul::-webkit-scrollbar {
+  display: none;
+}
+
+li {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+hr {
+  color: rgb(211, 211, 211);
+  border: 0.5px solid;
+}
+
+.logo {
+  color: rgb(150, 52, 255);
+}
+
+.nav-bar,
+.container {
+  background-color: white;
+  width: 100%;
+  box-shadow: 3px 3px 3px 1px rgb(217, 217, 217);
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  box-sizing: border-box;
+  border-radius: 4px;
+  height: 4rem;
+}
+
+.container {
+  flex: 1;
+  min-height: 500px;
+  padding: 1rem;
+  box-sizing: border-box;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn-add-expense {
+  border: none;
+  border-radius: 100%;
+  padding: 0.9rem;
+  color: white;
+  background-color: rgb(150, 52, 255);
+  box-shadow: 0px 2px 4px rgba(150, 147, 147, 0.2);
+}
+
+.btn-add-expense svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.btn-add-expense span {
+  display: none;
+}
+
+.btn-filter-active:hover,
+.btn-add-expense:hover {
+  background-color: rgb(114, 36, 198);
+  transition: background-color 0.5s;
+}
+
+@media (max-width: 767px) {
+  .btn-add-expense {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 4;
+  }
+}
+
+@media (min-width: 768px) {
+  .btn-add-expense {
+    position: relative;
+    gap: 0.5rem;
+    border-radius: 8px;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    font-size: 1rem;
+  }
+
+  .btn-add-expense svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .btn-add-expense span {
+    font-weight: 700;
+    display: block;
+  }
+}
+
+.btn-nav {
+  border-radius: 50%;
+  padding: 1rem;
+  color: rgb(92, 92, 92);
+}
+
+.btn-nav svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.btn-nav,
+.btn-open-tooltip {
+  border: none;
+  background-color: transparent;
+}
+
+.btn-open-tooltip:hover,
+.btn-nav:hover {
+  background-color: rgba(150, 147, 147, 0.1);
+}
+
+.btn-close-modal {
+  border: none;
+  background-color: transparent;
+  align-self: self-end;
+}
+
+.date-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  margin-top: 1rem;
+}
+
+.date-picker input {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: rgb(92, 92, 92);
+  border: 1.5px solid rgb(92, 92, 92);
+  font-weight: 400;
+}
+
+.total-container {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.body-text,
+.editable-row select {
+  color: rgb(92, 92, 92);
+  font-weight: 300;
+}
+
+.btn-filter {
+  gap: 0.3rem;
+  border: 1px solid rgb(231, 231, 231);
+  border-radius: 8px;
+  background-color: rgb(231, 231, 231, 0.5);
+  transition: background-color 0.2s;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  color: rgb(92, 92, 92);
+  font-weight: 400;
+}
+
+.btn-filter:hover {
+  background-color: rgb(231, 231, 231);
+}
+
+.btn-filter svg,
+.btn-filter-active svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.btn-filter-active {
+  gap: 0.3rem;
+  border: none;
+  border-radius: 8px;
+  background-color: rgb(150, 52, 255);
+  transition: background-color 0.5s;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  box-shadow: 0px 2px 4px rgba(150, 147, 147, 0.5);
+  color: white;
+  font-weight: 600;
+}
+
+.btn-filter-active svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  stroke-width: 2.2;
+}
+
+.filter {
+  position: relative;
+  align-self: self-start;
+}
+
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background-color: white;
+  border: 1px solid rgb(231, 231, 231);
+  border-radius: 8px;
+  padding: 0.5rem;
+  margin-top: 0.2rem;
+  z-index: 2;
+  box-shadow: 0px 2px 4px rgba(150, 147, 147, 0.2);
+}
+
+.filter-options span {
+  color: rgb(92, 92, 92);
+  font-weight: 300;
+  font-size: 0.9rem;
+}
+
+.filter-options input {
+  appearance: none;
+  width: 1em;
+  height: 1em;
+  background: white;
+  border-radius: 50%;
+  border: 1px solid rgb(150, 52, 255);
+  margin-left: 0.5rem;
+}
+
+.filter-options input:checked {
+  border-radius: 50%;
+  background-color: rgb(150, 52, 255);
+}
+
+.filter-options label {
+  min-width: 9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0rem;
+}
+
+.btn-clear {
+  border-radius: 8px;
+  border: none;
+  padding: 0.25rem;
+  margin: 0.25rem 0rem;
+  background-color: rgb(231, 231, 231, 0.5);
+}
+
+.btn-clear:hover {
+  background-color: rgb(231, 231, 231);
+}
+
+.expense-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0rem 0.5rem 1rem;
+  height: 2.5rem;
+}
+
+.expense-amount {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.btn-open-tooltip {
+  padding: 0.5rem;
+  margin: 0.5rem;
+  border-radius: 50%;
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.btn-open-tooltip svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.tooltip {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid rgb(150, 52, 255);
+  background-color: white;
+  padding: 0.5rem;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  transform: translate(-100%, -100%);
+  box-shadow: 0px 2px 4px rgba(150, 147, 147, 0.5);
+  z-index: 3;
+}
+
+.tooltip button {
+  border: none;
+  padding: 0.5rem 1rem;
+  display: flex;
+  background-color: transparent;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  color: rgb(150, 52, 255);
+}
+
+.tooltip button:hover {
+  background-color: rgb(150, 52, 255);
+  color: white;
+}
+
+.empty-list {
+  height: 100%;
+  font-weight: 300;
+  color: rgb(92, 92, 92, 0.5);
+  font-size: 0.8rem;
+  font-style: italic;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editable-row {
+  position: absolute;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  justify-content: space-between;
+  border: 3px solid rgb(150, 52, 255);
+  box-sizing: border-box;
+  padding: 0.5rem 0rem 0.5rem 1rem;
+}
+
+.editable-row select {
+  border: none;
+  min-width: 7rem;
+  font-style: italic;
+  font-size: 1rem;
+  padding: 0.5rem;
+}
+
+.editable-row input {
+  border: none;
+  flex-grow: 0;
+  width: 6rem;
+  max-width: 10rem;
+}
+
+.editable-row input:focus-visible,
+.editable-row select:focus-visible {
+  outline: 2px solid rgb(150, 52, 255, 0.5);
+  border-radius: 4px;
+}
+
+.new-expense-amount {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.new-expense-amount input,
+.new-expense-amount span {
+  font-size: 1.5rem;
+  font-style: italic;
+}
+
+.btn-update {
+  border: none;
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+  background-color: rgb(150, 52, 255);
+  color: white;
+  font-weight: 600;
+  margin: 0.5rem;
+}
+
+.btn-update:hover {
+  background-color: rgb(114, 36, 198);
+}
