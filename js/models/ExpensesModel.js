@@ -7,7 +7,7 @@ class Expense {
   }
 }
 
-class ExpenseModel {
+class ExpensesModel {
   constructor() {
     this.expenses = JSON.parse(localStorage.getItem("expenses")) || [];
     this.activeFilters = {
@@ -61,4 +61,4 @@ class ExpenseModel {
   }
 }
 
-export default ExpenseModel;
+export default ExpensesModel;

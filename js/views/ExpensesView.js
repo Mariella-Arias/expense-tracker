@@ -1,4 +1,4 @@
-class ExpenseView {
+class ExpensesView {
   constructor() {
     this.modal = document.getElementById("form-modal");
     this.openModalBtn = document.querySelector(".btn-add-expense");
@@ -427,4 +427,4 @@ class ExpenseView {
   }
 }
 
-export default ExpenseView;
+export default ExpensesView;

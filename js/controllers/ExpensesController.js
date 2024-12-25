@@ -1,4 +1,4 @@
-class ExpenseController {
+class ExpensesController {
   constructor(model, view) {
     this.model = model;
     this.view = view;
@@ -83,7 +83,6 @@ class ExpenseController {
   }
 
   handleEditClick(id) {
-    console.log("handle edit");
     this.view.renderEditableRow(
       this.model.getExpenses()[id],
       this.model.activeFilters,
@@ -158,4 +157,4 @@ class ExpenseController {
   }
 }
 
-export default ExpenseController;
+export default ExpensesController;
