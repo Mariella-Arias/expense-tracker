@@ -4,7 +4,10 @@ class ExpenseController {
     this.view = view;
 
     //Initial render
-    this.view.renderExpenses(this.model.getExpensesByDate(this.getToday()));
+    this.view.renderExpenses(this.model.getExpensesByDate(this.getToday()), {
+      handleEdit: this.handleEditClick.bind(this),
+      delete: this.handleDeleteExpense.bind(this),
+    });
     this.view.initializeDatePickers(this.getToday());
 
     // Bound View events
@@ -72,7 +75,39 @@ class ExpenseController {
     } else {
       list = this.model.getExpensesByDate(date);
     }
-    this.view.renderExpenses(list);
+
+    this.view.renderExpenses(list, {
+      handleEdit: this.handleEditClick.bind(this),
+      delete: this.handleDeleteExpense.bind(this),
+    });
+  }
+
+  handleEditClick(id) {
+    console.log("handle edit");
+    this.view.renderEditableRow(
+      this.model.getExpenses()[id],
+      this.model.activeFilters,
+      this.editExpense.bind(this)
+    );
+  }
+
+  editExpense(id, newValues) {
+    this.model.updateExpense(id, newValues);
+    this.view.renderExpenses(
+      this.model.getExpensesByDate(this.view.currentDate.value)
+    );
+  }
+
+  handleDeleteExpense(index) {
+    this.model.deleteExpense(index);
+
+    this.view.renderExpenses(
+      this.model.getExpensesByDate(this.view.currentDate.value),
+      {
+        handleEdit: this.handleEditClick.bind(this),
+        delete: this.handleDeleteExpense.bind(this),
+      }
+    );
   }
 
   handleFilterClick() {
@@ -116,7 +151,10 @@ class ExpenseController {
       list = this.model.getExpensesByDate(this.view.currentDate.value);
     }
 
-    this.view.renderExpenses(list);
+    this.view.renderExpenses(list, {
+      handleEdit: this.handleEditClick.bind(this),
+      delete: this.handleDeleteExpense.bind(this),
+    });
   }
 }
 

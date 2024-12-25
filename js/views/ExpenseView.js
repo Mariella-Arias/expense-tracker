@@ -19,7 +19,7 @@ class ExpenseView {
     this.handleClickOutsideModal = this.#handleClickOutsideModal.bind(this);
   }
 
-  renderExpenses(expenses) {
+  renderExpenses(expenses, cb) {
     let total = 0;
 
     while (this.expenseList.firstChild) {
@@ -28,20 +28,21 @@ class ExpenseView {
 
     if (expenses.length) {
       const rows = expenses
-        .map(({ amount, category }, idx) => {
+        .map(({ amount, category, id }) => {
+          // console.log("AMOUNT ", amount, " CATEGORY: ", category, " ID: ", id);
           total += Number(amount);
 
-          return `<li id="expense-${idx}">
+          return `<li id="expense-${id}">
                    <div class="expense-item">
                    <p class="body-text">${
                      category.charAt(0).toUpperCase() +
                      category.slice(1) +
-                     `-${idx}`
+                     `-${id}`
                    }
                    </p>
                    <div class="expense-amount">
                      <span>$${Number(amount).toFixed(2)}</span>
-                     <button id="expense-options-${idx}" class="btn btn-open-tooltip">
+                     <button id="expense-options-${id}" class="btn btn-open-tooltip">
                      <svg
                      xmlns="http://www.w3.org/2000/svg"
                      fill="none"
@@ -68,9 +69,11 @@ class ExpenseView {
 
       const optionsButton = document.querySelectorAll(".btn-open-tooltip");
 
-      optionsButton.forEach((button) =>
-        button.addEventListener("click", (e) => this.renderTooltip(e))
-      );
+      optionsButton.forEach((button) => {
+        const id = Number(button.getAttribute("id").split("-")[2]);
+
+        button.addEventListener("click", (e) => this.renderTooltip(e, id, cb));
+      });
     } else {
       this.expenseList.insertAdjacentHTML(
         "afterbegin",
@@ -83,7 +86,7 @@ class ExpenseView {
     this.total.textContent = `$${Number(total).toFixed(2)}`;
   }
 
-  renderTooltip(e) {
+  renderTooltip(e, index, cb) {
     document.querySelector("body").insertAdjacentHTML(
       "afterbegin",
       `<div class="tooltip">
@@ -126,6 +129,14 @@ class ExpenseView {
       e.stopPropagation();
       cleanTooltip();
     });
+
+    document.querySelector(".btn-delete").addEventListener("click", () => {
+      cb.delete(index);
+    });
+
+    document
+      .querySelector(".btn-edit")
+      .addEventListener("click", () => cb.handleEdit(index));
   }
 
   bindOpenModal(handler) {
@@ -227,6 +238,75 @@ class ExpenseView {
 
   bindFilterButton(handler) {
     this.filterButton.addEventListener("click", handler);
+  }
+
+  renderEditableRow(expense, filters, submitHandler) {
+    const li = document.getElementById(`expense-${expense.id}`);
+
+    const options = Object.keys(filters)
+      .sort()
+      .map(
+        (filter) =>
+          `<option value="${filter}" ${
+            filter === expense.category ? "selected" : ""
+          }>${filter.charAt(0).toUpperCase() + filter.slice(1)}</option>`
+      )
+      .join("");
+
+    li.insertAdjacentHTML(
+      "afterbegin",
+      `<form id="edit-expense" class="editable-row">
+             <select name="category" required>
+              ${options}
+             </select>
+             <div class="new-expense-amount">
+               <span>$</span>
+               <input
+               value="${Number(expense.amount).toFixed(2)}"
+                 name="amount"
+                 type="number"
+                 placeholder="0.00"
+                 min="0"
+                 step="0.01"
+                 required
+                />
+               <button id="update-expense" type="submit" class="btn btn-update">Save</button>
+             </div>
+            </form>`
+    );
+
+    const editableRow = document.getElementById("edit-expense");
+
+    const selectElement = editableRow.querySelector("select");
+    selectElement.focus();
+
+    editableRow.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const data = new FormData(e.target);
+
+      const newValues = {
+        category: data.get("category"),
+        amount: parseFloat(data.get("amount")),
+      };
+
+      submitHandler(expense.id, newValues);
+
+      cleanEditableRow();
+    });
+    const cleanEditableRow = () => {
+      if (editableRow) {
+        editableRow.remove();
+      }
+      window.removeEventListener("click", removeEditableRow);
+    };
+
+    const removeEditableRow = (e) => {
+      if (editableRow && !editableRow.contains(e.target)) {
+        cleanEditableRow();
+      }
+    };
+
+    window.addEventListener("click", removeEditableRow);
   }
 
   renderFilterDropdown(filters, setFilter, clearFilters) {

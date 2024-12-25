@@ -1,3 +1,12 @@
+class Expense {
+  constructor(id, amount, category, date) {
+    this.id = id;
+    this.amount = amount;
+    this.category = category;
+    this.date = date;
+  }
+}
+
 class ExpenseModel {
   constructor() {
     this.expenses = JSON.parse(localStorage.getItem("expenses")) || [];
@@ -25,15 +34,30 @@ class ExpenseModel {
   }
 
   getExpensesByDate(date) {
-    return this.expenses.filter((expense) => expense.date === date);
+    const mapped = this.expenses
+      .map(
+        (expense, idx) =>
+          new Expense(idx, expense.amount, expense.category, expense.date)
+      )
+      .filter((expense) => expense.date === date);
+
+    return mapped;
   }
 
   getExpenses() {
-    return this.expenses;
+    return this.expenses.map(
+      (expense, idx) =>
+        new Expense(idx, expense.amount, expense.category, expense.date)
+    );
   }
 
   changeSelectedFilter(key, isSelected) {
     this.activeFilters[key] = isSelected;
+  }
+
+  updateExpense(index, vals) {
+    Object.assign(this.expenses[index], vals);
+    this.updateLocalStorage();
   }
 }
 
