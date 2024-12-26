@@ -31,18 +31,16 @@ class ExpensesView {
     if (expenses.length) {
       const rows = expenses
         .map(({ amount, category, id }) => {
-          total += Number(amount);
+          total += amount;
 
           return `<li id="expense-${id}">
                    <div class="expense-item">
                    <p class="body-text">${
-                     category.charAt(0).toUpperCase() +
-                     category.slice(1) +
-                     `-${id}`
+                     category.charAt(0).toUpperCase() + category.slice(1)
                    }
                    </p>
                    <div class="expense-amount">
-                     <span>$${Number(amount).toFixed(2)}</span>
+                     <span>$${amount.toFixed(2)}</span>
                      <button id="expense-options-${id}" class="btn btn-open-tooltip">
                      <svg
                      xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +69,7 @@ class ExpensesView {
       const optionsButton = document.querySelectorAll(".btn-open-tooltip");
 
       optionsButton.forEach((button) => {
-        const id = Number(button.getAttribute("id").split("-")[2]);
+        const id = parseInt(button.getAttribute("id").split("-")[2]);
 
         button.addEventListener("click", (e) => this.renderTooltip(e, id, cb));
       });
@@ -84,7 +82,7 @@ class ExpensesView {
       );
     }
 
-    this.total.textContent = `$${Number(total).toFixed(2)}`;
+    this.total.textContent = `$${total.toFixed(2)}`;
   }
 
   renderTooltip(e, index, cb) {
@@ -173,9 +171,9 @@ class ExpensesView {
       let [year, monthIndex, day] = this.currentDate.value.split("-");
 
       let yesterday = new Date(
-        Number(year),
-        Number(monthIndex) - 1,
-        Number(day)
+        parseInt(year),
+        parseInt(monthIndex) - 1,
+        parseInt(day)
       );
       yesterday.setDate(yesterday.getDate() - 1);
 
@@ -190,18 +188,18 @@ class ExpensesView {
       const [year, monthIndex, day] = this.currentDate.value.split("-");
 
       const tomorrow = new Date(
-        Number(year),
-        Number(monthIndex) - 1,
-        Number(day)
+        parseInt(year),
+        parseInt(monthIndex) - 1,
+        parseInt(day)
       );
       tomorrow.setDate(tomorrow.getDate() + 1);
 
       const [maxYear, maxMonthIndex, maxDay] = this.currentDate.max.split("-");
 
       const max = new Date(
-        Number(maxYear),
-        Number(maxMonthIndex) - 1,
-        Number(maxDay)
+        parseInt(maxYear),
+        parseInt(maxMonthIndex) - 1,
+        parseInt(maxDay)
       );
 
       if (tomorrow > max) {
@@ -240,7 +238,7 @@ class ExpensesView {
              <div class="new-expense-amount">
                <span>$</span>
                <input
-               value="${Number(expense.amount).toFixed(2)}"
+               value="${expense.amount.toFixed(2)}"
                  name="amount"
                  type="number"
                  placeholder="0.00"
