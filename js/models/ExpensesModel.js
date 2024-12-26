@@ -9,7 +9,7 @@ class Expense {
 
 class ExpensesModel {
   constructor() {
-    this.expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    this.expenses = this.#getLocalStorage();
     this.filters = {
       entertainment: false,
       essentials: false,
@@ -21,17 +21,17 @@ class ExpensesModel {
 
   addExpense(expense) {
     this.expenses.push(expense);
-    this.#updateLocalStorage();
+    this.#setLocalStorage();
   }
 
   deleteExpense(idx) {
     this.expenses.splice(idx, 1);
-    this.#updateLocalStorage();
+    this.#setLocalStorage();
   }
 
   updateExpense(idx, vals) {
     Object.assign(this.expenses[idx], vals);
-    this.#updateLocalStorage(this.expenses);
+    this.#setLocalStorage(this.expenses);
   }
 
   getExpenses() {
@@ -60,8 +60,12 @@ class ExpensesModel {
     this.filters[key] = isSelected;
   }
 
-  #updateLocalStorage() {
+  #setLocalStorage() {
     localStorage.setItem("expenses", JSON.stringify(this.expenses));
+  }
+
+  #getLocalStorage() {
+    return JSON.parse(localStorage.getItem("expenses")) || [];
   }
 }
 
