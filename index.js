@@ -1,9 +1,9 @@
-import ExpenseModel from "./js/models/ExpenseModel.js";
-import ExpenseView from "./js/views/ExpenseView.js";
-import ExpenseController from "./js/controllers/ExpenseController.js";
+import ExpensesModel from "./js/models/ExpensesModel.js";
+import ExpensesView from "./js/views/ExpensesView.js";
+import ExpensesController from "./js/controllers/ExpensesController.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const model = new ExpenseModel();
-  const view = new ExpenseView();
-  new ExpenseController(model, view);
+  const model = new ExpensesModel();
+  const view = new ExpensesView();
+  new ExpensesController(model, view);
 });
