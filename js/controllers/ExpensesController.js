@@ -4,20 +4,17 @@ class ExpensesController {
     this.view = view;
 
     //Initial render
-    this.view.renderExpenses(this.model.getExpensesByDate(this.getToday()), {
-      handleEdit: this.handleEditClick.bind(this),
-      delete: this.handleDeleteExpense.bind(this),
-    });
     this.view.initializeDatePickers(this.getToday());
+    this.#updateList(this.getToday());
 
     // Bound View events
     this.view.bindOpenModal(this.#handleOpenModal.bind(this));
     this.view.bindCloseModal(this.#handleCloseModal.bind(this));
     this.view.bindAddExpense(this.#handleAddExpense.bind(this));
-    this.view.bindChangeDate(this.#handleDateChange.bind(this));
-    this.view.bindPrevDay(this.#handleDateChange.bind(this));
-    this.view.bindNextDay(this.#handleDateChange.bind(this));
-    this.view.bindFilterButton(this.handleFilterClick.bind(this));
+    this.view.bindChangeDate(this.#updateList.bind(this));
+    this.view.bindPrevDay(this.#updateList.bind(this));
+    this.view.bindNextDay(this.#updateList.bind(this));
+    this.view.bindFilterButton(this.#handleFilterClick.bind(this));
   }
 
   #getCalendarDate(date = new Date()) {
@@ -52,12 +49,12 @@ class ExpensesController {
     this.model.addExpense(expense);
 
     if (this.view.currentDate.value === expense.date) {
-      this.updateList(expense.date);
+      this.#updateList(expense.date);
     }
   }
 
   #isFilterActive() {
-    return Object.values(this.model.activeFilters).reduce(
+    return Object.values(this.model.filters).reduce(
       (acc, curr) => acc + (curr ? 1 : 0),
       0
     )
@@ -65,60 +62,34 @@ class ExpensesController {
       : false;
   }
 
-  #handleDateChange(date) {
-    let list;
-
-    if (this.#isFilterActive()) {
-      list = this.model
-        .getExpensesByDate(date)
-        .filter((expense) => this.model.activeFilters[expense.category]);
-    } else {
-      list = this.model.getExpensesByDate(date);
-    }
-
-    this.view.renderExpenses(list, {
-      handleEdit: this.handleEditClick.bind(this),
-      delete: this.handleDeleteExpense.bind(this),
-    });
-  }
-
-  handleEditClick(id) {
+  #handleEditExpense(id) {
     this.view.renderEditableRow(
       this.model.getExpenses()[id],
-      this.model.activeFilters,
-      this.editExpense.bind(this)
+      this.model.filters,
+      this.#editExpense.bind(this)
     );
   }
 
-  editExpense(id, newValues) {
+  #editExpense(id, newValues) {
     this.model.updateExpense(id, newValues);
-    this.view.renderExpenses(
-      this.model.getExpensesByDate(this.view.currentDate.value)
-    );
+    this.#updateList(this.view.currentDate.value);
   }
 
-  handleDeleteExpense(index) {
+  #handleDeleteExpense(index) {
     this.model.deleteExpense(index);
-
-    this.view.renderExpenses(
-      this.model.getExpensesByDate(this.view.currentDate.value),
-      {
-        handleEdit: this.handleEditClick.bind(this),
-        delete: this.handleDeleteExpense.bind(this),
-      }
-    );
+    this.#updateList(this.view.currentDate.value);
   }
 
-  handleFilterClick() {
+  #handleFilterClick() {
     this.view.renderFilterDropdown(
-      this.model.activeFilters,
-      this.handleFilterChange.bind(this),
-      this.clearFilters.bind(this)
+      this.model.filters,
+      this.#handleFilterChange.bind(this),
+      this.#clearFilters.bind(this)
     );
   }
 
-  handleFilterChange(key, checked) {
-    this.model.changeSelectedFilter(key, checked);
+  #handleFilterChange(key, checked) {
+    this.model.changeFilter(key, checked);
 
     if (this.#isFilterActive()) {
       this.view.setFilterOn();
@@ -126,33 +97,33 @@ class ExpensesController {
       this.view.setFilterOff();
     }
 
-    this.updateList(this.view.currentDate.value);
+    this.#updateList(this.view.currentDate.value);
   }
 
-  clearFilters() {
-    Object.keys(this.model.activeFilters).forEach((filter) =>
-      this.model.changeSelectedFilter(filter, false)
+  #clearFilters() {
+    Object.keys(this.model.filters).forEach((filter) =>
+      this.model.changeFilter(filter, false)
     );
 
     this.view.setFilterOff();
 
-    this.updateList(this.view.currentDate.value);
+    this.#updateList(this.view.currentDate.value);
   }
 
-  updateList(date) {
+  #updateList(date) {
     let list;
 
     if (this.#isFilterActive()) {
       list = this.model
         .getExpensesByDate(date)
-        .filter((expense) => this.model.activeFilters[expense.category]);
+        .filter((expense) => this.model.filters[expense.category]);
     } else {
       list = this.model.getExpensesByDate(this.view.currentDate.value);
     }
 
     this.view.renderExpenses(list, {
-      handleEdit: this.handleEditClick.bind(this),
-      delete: this.handleDeleteExpense.bind(this),
+      editHandler: this.#handleEditExpense.bind(this),
+      deleteHandler: this.#handleDeleteExpense.bind(this),
     });
   }
 }

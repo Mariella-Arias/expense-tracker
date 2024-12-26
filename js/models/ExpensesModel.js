@@ -10,7 +10,7 @@ class Expense {
 class ExpensesModel {
   constructor() {
     this.expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-    this.activeFilters = {
+    this.filters = {
       entertainment: false,
       essentials: false,
       miscellaneous: false,
@@ -21,18 +21,30 @@ class ExpensesModel {
 
   addExpense(expense) {
     this.expenses.push(expense);
-    this.updateLocalStorage();
+    this.#updateLocalStorage();
   }
 
   deleteExpense(idx) {
     this.expenses.splice(idx, 1);
-    this.updateLocalStorage();
+    this.#updateLocalStorage();
   }
 
-  updateLocalStorage() {
-    localStorage.setItem("expenses", JSON.stringify(this.expenses));
+  updateExpense(idx, vals) {
+    Object.assign(this.expenses[idx], vals);
+    this.#updateLocalStorage(this.expenses);
   }
 
+  getExpenses() {
+    return this.expenses.map(
+      (expense, idx) =>
+        new Expense(idx, expense.amount, expense.category, expense.date)
+    );
+  }
+
+  /**
+   * @params
+   *  date: YEAR-MONTH-DAY, 2024-12-03
+   */
   getExpensesByDate(date) {
     const mapped = this.expenses
       .map(
@@ -44,20 +56,12 @@ class ExpensesModel {
     return mapped;
   }
 
-  getExpenses() {
-    return this.expenses.map(
-      (expense, idx) =>
-        new Expense(idx, expense.amount, expense.category, expense.date)
-    );
+  changeFilter(key, isSelected) {
+    this.filters[key] = isSelected;
   }
 
-  changeSelectedFilter(key, isSelected) {
-    this.activeFilters[key] = isSelected;
-  }
-
-  updateExpense(index, vals) {
-    Object.assign(this.expenses[index], vals);
-    this.updateLocalStorage();
+  #updateLocalStorage() {
+    localStorage.setItem("expenses", JSON.stringify(this.expenses));
   }
 }
 

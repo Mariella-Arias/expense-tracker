@@ -29,7 +29,6 @@ class ExpensesView {
     if (expenses.length) {
       const rows = expenses
         .map(({ amount, category, id }) => {
-          // console.log("AMOUNT ", amount, " CATEGORY: ", category, " ID: ", id);
           total += Number(amount);
 
           return `<li id="expense-${id}">
@@ -131,12 +130,12 @@ class ExpensesView {
     });
 
     document.querySelector(".btn-delete").addEventListener("click", () => {
-      cb.delete(index);
+      cb.deleteHandler(index);
     });
 
     document
       .querySelector(".btn-edit")
-      .addEventListener("click", () => cb.handleEdit(index));
+      .addEventListener("click", () => cb.editHandler(index));
   }
 
   bindOpenModal(handler) {
@@ -407,10 +406,6 @@ class ExpensesView {
     this.addExpenseForm.reset();
     this.modal.removeEventListener("click", this.handleClickOutsideModal);
     this.modal.close();
-  }
-
-  setFormAttributes(date) {
-    console.log("Current Date: ", date);
   }
 
   #handleClickOutsideModal(e) {
