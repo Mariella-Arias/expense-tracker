@@ -1,3 +1,5 @@
+import ExpensesController from "../controllers/ExpensesController.js";
+
 class ExpensesView {
   constructor() {
     this.modal = document.getElementById("form-modal");
@@ -177,19 +179,7 @@ class ExpensesView {
       );
       yesterday.setDate(yesterday.getDate() - 1);
 
-      const locale = navigator.language;
-
-      const prevYear = new Intl.DateTimeFormat(locale, {
-        year: "numeric",
-      }).format(new Date(yesterday));
-      let prevMonth = new Intl.DateTimeFormat(locale, {
-        month: "2-digit",
-      }).format(new Date(yesterday));
-      let prevDay = new Intl.DateTimeFormat(locale, {
-        day: "2-digit",
-      }).format(new Date(yesterday));
-
-      this.currentDate.value = `${prevYear}-${prevMonth}-${prevDay}`;
+      this.currentDate.value = ExpensesController.getCalendarDate(yesterday);
 
       handler(this.currentDate.value);
     });
@@ -218,18 +208,7 @@ class ExpensesView {
         return;
       }
 
-      const locale = navigator.language;
-      const nextYear = new Intl.DateTimeFormat(locale, {
-        year: "numeric",
-      }).format(new Date(tomorrow));
-      let nextMonth = new Intl.DateTimeFormat(locale, {
-        month: "2-digit",
-      }).format(new Date(tomorrow));
-      let nextDay = new Intl.DateTimeFormat(locale, {
-        day: "2-digit",
-      }).format(new Date(tomorrow));
-
-      this.currentDate.value = `${nextYear}-${nextMonth}-${nextDay}`;
+      this.currentDate.value = ExpensesController.getCalendarDate(tomorrow);
 
       handler(this.currentDate.value);
     });

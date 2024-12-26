@@ -4,8 +4,8 @@ class ExpensesController {
     this.view = view;
 
     //Initial render
-    this.view.initializeDatePickers(this.getToday());
-    this.#updateList(this.getToday());
+    this.view.initializeDatePickers(this.#getToday());
+    this.#updateList(this.#getToday());
 
     // Bound View events
     this.view.bindOpenModal(this.#handleOpenModal.bind(this));
@@ -17,24 +17,24 @@ class ExpensesController {
     this.view.bindFilterButton(this.#handleFilterClick.bind(this));
   }
 
-  #getCalendarDate(date = new Date()) {
+  static getCalendarDate(date = new Date()) {
     const locale = navigator.language;
 
     const year = new Intl.DateTimeFormat(locale, {
       year: "numeric",
     }).format(date);
     const month = new Intl.DateTimeFormat(locale, {
-      month: "numeric",
+      month: "2-digit",
     }).format(date);
     const day = new Intl.DateTimeFormat(locale, {
-      day: "numeric",
+      day: "2-digit",
     }).format(date);
 
     return `${year}-${month}-${day}`;
   }
 
-  getToday() {
-    return this.#getCalendarDate(new Date());
+  #getToday() {
+    return ExpensesController.getCalendarDate(new Date());
   }
 
   #handleOpenModal() {
