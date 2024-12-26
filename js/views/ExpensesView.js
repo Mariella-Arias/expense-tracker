@@ -77,7 +77,7 @@ class ExpensesView {
       this.expenseList.insertAdjacentHTML(
         "afterbegin",
         `<div class="empty-list">
-          <span>No expenses available for the selected criteria</span>
+          <span>No expenses for the selected criteria</span>
         </div>`
       );
     }
