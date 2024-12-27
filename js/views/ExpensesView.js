@@ -86,6 +86,12 @@ class ExpensesView {
   }
 
   renderTooltip(e, index, cb) {
+    const prevTooltip = document.querySelector(".tooltip");
+
+    if (prevTooltip) {
+      prevTooltip.remove();
+    }
+
     document.querySelector("body").insertAdjacentHTML(
       "afterbegin",
       `<div class="tooltip">
