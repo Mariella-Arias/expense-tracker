@@ -305,6 +305,7 @@ class ExpensesView {
                     <input
                      type="checkbox" 
                      name="${filter}"
+                     class="filter-option"
                      ${filters[filter] ? "checked" : ""}
                     />
                   </label>`
@@ -354,15 +355,7 @@ class ExpensesView {
       clear.addEventListener("click", (e) => {
         // e.stopPropagation();
         clearFilters();
-        // Object.keys(filters).forEach((filter) => setFilter(filter, false));
-
-        // this.#refreshContent();
         cleanDropdown();
-
-        // document
-        //   .getElementById("filter-button")
-        //   .classList.remove("btn-filter-active");
-        // document.getElementById("filter-button").classList.add("btn-filter");
       });
     }
   }
