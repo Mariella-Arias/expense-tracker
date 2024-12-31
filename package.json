@@ -1,0 +1,20 @@
+{
+  "name": "expense-tracker",
+  "version": "1.0.0",
+  "description": "Description: Expense tracker to manage daily expenses.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "live-server .",
+    "test": "mocha tests"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^5.1.2",
+    "jsdom": "^25.0.1",
+    "live-server": "^1.2.2",
+    "mocha": "^11.0.1"
+  }
+}
