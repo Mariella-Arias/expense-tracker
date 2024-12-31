@@ -11,7 +11,7 @@ class ExpensesController {
     if (enableBindings) {
       this.view.bindOpenModal(this.#handleOpenModal.bind(this));
       this.view.bindCloseModal(this.#handleCloseModal.bind(this));
-      this.view.bindAddExpense(this.#handleAddExpense.bind(this));
+      this.view.bindAddExpense(this.handleAddExpense.bind(this));
       this.view.bindChangeDate(this.#updateList.bind(this));
       this.view.bindPrevDay(this.#updateList.bind(this));
       this.view.bindNextDay(this.#updateList.bind(this));
@@ -52,7 +52,7 @@ class ExpensesController {
     this.view.closeModal();
   }
 
-  #handleAddExpense(expense) {
+  handleAddExpense(expense) {
     this.model.addExpense(expense);
 
     if (this.view.currentDate.value === expense.date) {
