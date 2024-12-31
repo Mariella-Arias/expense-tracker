@@ -1,5 +1,5 @@
 class ExpensesController {
-  constructor(model, view) {
+  constructor(model, view, { enableBindings = true } = {}) {
     this.model = model;
     this.view = view;
 
@@ -8,13 +8,15 @@ class ExpensesController {
     this.#updateList(this.#getToday());
 
     // Bound View events
-    this.view.bindOpenModal(this.#handleOpenModal.bind(this));
-    this.view.bindCloseModal(this.#handleCloseModal.bind(this));
-    this.view.bindAddExpense(this.#handleAddExpense.bind(this));
-    this.view.bindChangeDate(this.#updateList.bind(this));
-    this.view.bindPrevDay(this.#updateList.bind(this));
-    this.view.bindNextDay(this.#updateList.bind(this));
-    this.view.bindFilterButton(this.#handleFilterClick.bind(this));
+    if (enableBindings) {
+      this.view.bindOpenModal(this.#handleOpenModal.bind(this));
+      this.view.bindCloseModal(this.#handleCloseModal.bind(this));
+      this.view.bindAddExpense(this.#handleAddExpense.bind(this));
+      this.view.bindChangeDate(this.#updateList.bind(this));
+      this.view.bindPrevDay(this.#updateList.bind(this));
+      this.view.bindNextDay(this.#updateList.bind(this));
+      this.view.bindFilterButton(this.#handleFilterClick.bind(this));
+    }
   }
 
   static getCalendarDate(date = new Date()) {
@@ -22,12 +24,17 @@ class ExpensesController {
 
     const year = new Intl.DateTimeFormat(locale, {
       year: "numeric",
+      timeZone: "UTC",
     }).format(date);
+
     const month = new Intl.DateTimeFormat(locale, {
       month: "2-digit",
+      timeZone: "UTC",
     }).format(date);
+
     const day = new Intl.DateTimeFormat(locale, {
       day: "2-digit",
+      timeZone: "UTC",
     }).format(date);
 
     return `${year}-${month}-${day}`;
