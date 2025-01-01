@@ -21,8 +21,10 @@ body {
 }
 
 dialog {
-  align-self: center;
-  justify-self: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: white;
   border: none;
   box-shadow: 3px 3px 4px 2px rgb(217, 217, 217);
@@ -71,6 +73,7 @@ dialog select {
   border: 1px solid;
   padding: 0.5rem;
   box-sizing: border-box;
+  background-color: aqua;
 }
 
 ul {
