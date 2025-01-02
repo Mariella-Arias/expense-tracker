@@ -445,10 +445,11 @@ hr {
 
 .editable-row select {
   border: none;
-  min-width: 7rem;
+  min-width: 9rem;
   font-style: italic;
   font-size: 1rem;
   padding: 0.5rem;
+  margin-right: 1rem;
 }
 
 .editable-row input {
