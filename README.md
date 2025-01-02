@@ -21,19 +21,20 @@ The application allows users to manage their expenses through CRUD operations, w
 
 Before installing and running the Expense Tracker App, ensure that you have the following installed:
 
-Node.js:
+#### Node.js:
 This application requires Node.js to run and manage the development environment.
 
-Version: v21.6.1 (or higher)
-You can download and install Node.js from the official website: Node.js.
+**Version:** v21.6.1 (or higher)
+You can download and install Node.js from the official website: [Node.js](https://nodejs.org)
 
-Operating System:
+#### Operating System:
 The app can run on any operating system that supports Node.js. This includes:
 
-Windows 10 (or higher)
-macOS 10.14+
-Linux (any modern distribution)
-Package Manager:
+- Windows 10 (or higher)
+- macOS 10.14+
+- Linux (any modern distribution)
+
+#### Package Manager:
 The app uses npm (Node Package Manager) for managing dependencies. It is automatically installed when you install Node.js.
 
 ### Installing and Executing Program
