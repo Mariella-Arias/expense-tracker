@@ -13,17 +13,23 @@
     />
   </head>
   <body>
-    <dialog id="form-modal">
+    <dialog
+      id="form-modal"
+      role="dialog"
+      aria-labelledby="new-expense-title"
+      aria-hidden="true"
+    >
       <form id="new-expense" method="dialog">
-        <button class="btn btn-close-modal" type="button">
+        <button class="btn btn-close-modal" type="button" aria-label="Close">
           <span>&times;</span>
         </button>
-        <h2>New Expense</h2>
+        <h2 id="new-expense-title">New Expense</h2>
 
         <div class="form-fields">
           <div class="form-field">
-            <label htmlFor="amount">Amount (USD): </label>
+            <label for="amount">Amount (USD): </label>
             <input
+              id="amount"
               name="amount"
               type="number"
               placeholder="0.00"
@@ -34,12 +40,12 @@
             />
           </div>
           <div class="form-field">
-            <label htmlFor="date">Expense Date: </label>
+            <label for="date-input">Expense Date: </label>
             <input id="date-input" name="date" type="date" required />
           </div>
           <div class="form-field">
-            <label htmlFor="category">Category: </label>
-            <select name="category" required>
+            <label for="category">Category: </label>
+            <select id="category" name="category" required>
               <option value="" disabled selected hidden>Select</option>
               <option value="essentials">Essentials</option>
               <option value="entertainment">Entertainment</option>
@@ -50,12 +56,15 @@
           </div>
         </div>
 
-        <button class="btn btn-submit-expense"><span>Add</span></button>
+        <button class="btn btn-submit-expense" aria-label="Add expense">
+          <span>Add</span>
+        </button>
       </form>
     </dialog>
-
     <div class="nav-bar">
-      <h2 class="logo">spendwise</h2>
+      <!-- <h2 class="logo">spendwise</h2> -->
+
+      <h1 class="logo">spendwise</h1>
       <button class="btn btn-add-expense">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -73,9 +82,16 @@
         <span>Add expense</span>
       </button>
     </div>
-    <div class="container">
+    <main class="container">
       <form id="date-picker" class="date-picker">
-        <button id="nav-prev" class="btn btn-nav" type="button">
+        <button
+          id="nav-prev"
+          class="btn btn-nav"
+          type="button"
+          role="button"
+          aria-label="Go to previous day"
+          aria-controls="selected-date"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -91,7 +107,14 @@
           </svg>
         </button>
         <input id="selected-date" type="date" name="date" />
-        <button id="nav-fwd" class="btn btn-nav" type="button">
+        <button
+          id="nav-fwd"
+          class="btn btn-nav"
+          type="button"
+          role="button"
+          aria-label="Go to next day"
+          aria-controls="selected-date"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -130,8 +153,8 @@
           <span>Filter</span>
         </button>
       </div>
-      <ul id="expense-list"></ul>
-    </div>
+      <ul id="expense-list" aria-live="polite" aria-label="Expense list"></ul>
+    </main>
     <script type="module" src="index.js"></script>
   </body>
 </html>

@@ -41,7 +41,7 @@ class ExpensesView {
                    </p>
                    <div class="expense-amount">
                      <span>$${amount.toFixed(2)}</span>
-                     <button id="expense-options-${id}" class="btn btn-open-tooltip">
+                     <button id="expense-options-${id}" class="btn btn-open-tooltip" aria-label="Open expense options tooltip">
                      <svg
                      xmlns="http://www.w3.org/2000/svg"
                      fill="none"
@@ -95,8 +95,8 @@ class ExpensesView {
     document.querySelector("body").insertAdjacentHTML(
       "afterbegin",
       `<div class="tooltip">
-          <button class="btn btn-edit">Edit</button>
-          <button class="btn btn-delete">Delete</button>
+          <button class="btn btn-edit" type="button">Edit</button>
+          <button class="btn btn-delete" type="button">Delete</button>
          </div>`
     );
 
@@ -300,11 +300,12 @@ class ExpensesView {
       const filterOptions = Object.keys(filters)
         .sort()
         .map(
-          (filter) => `<label htmlFor="${filter}">
+          (filter) => `<label for="${filter}">
             <span>${filter.charAt(0).toUpperCase() + filter.slice(1)}</span>
                     <input
-                     type="checkbox" 
+                     id="${filter}"
                      name="${filter}"
+                     type="checkbox" 
                      class="filter-option"
                      ${filters[filter] ? "checked" : ""}
                     />
@@ -320,7 +321,8 @@ class ExpensesView {
           <button 
            id="clear-filters" 
            type="button" 
-           class="btn btn-clear">
+           class="btn btn-clear"
+           aria-label="Clear all filters">
           <span>Clear</span>
           </button> 
         </form>`;
@@ -370,6 +372,7 @@ class ExpensesView {
 
   openModal() {
     this.modal.showModal();
+    this.modal.setAttribute("aria-hidden", "false");
 
     document
       .getElementById("date-input")
@@ -380,6 +383,7 @@ class ExpensesView {
 
   closeModal() {
     this.addExpenseForm.reset();
+    this.modal.setAttribute("aria-hidden", "true");
     this.modal.removeEventListener("click", this.handleClickOutsideModal);
     this.modal.close();
   }
