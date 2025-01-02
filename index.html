@@ -21,8 +21,9 @@
         <h2>New Expense</h2>
 
         <div class="form-fields">
-          <label htmlFor="amount"
-            >Amount (USD):<input
+          <div class="form-field">
+            <label htmlFor="amount">Amount (USD): </label>
+            <input
               name="amount"
               type="number"
               placeholder="0.00"
@@ -31,16 +32,13 @@
               autofocus
               required
             />
-          </label>
-          <label htmlFor="date"
-            >Expense Date:<input
-              id="date-input"
-              name="date"
-              type="date"
-              required
-          /></label>
-          <label htmlFor="category"
-            >Category:
+          </div>
+          <div class="form-field">
+            <label htmlFor="date">Expense Date: </label>
+            <input id="date-input" name="date" type="date" required />
+          </div>
+          <div class="form-field">
+            <label htmlFor="category">Category: </label>
             <select name="category" required>
               <option value="" disabled selected hidden>Select</option>
               <option value="essentials">Essentials</option>
@@ -48,8 +46,8 @@
               <option value="payments">Payments</option>
               <option value="wellness">Wellness</option>
               <option value="miscellaneous">Miscellaneous</option>
-            </select></label
-          >
+            </select>
+          </div>
         </div>
 
         <button class="btn btn-submit-expense"><span>Add</span></button>
