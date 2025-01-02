@@ -117,12 +117,11 @@ The application uses a simple yet effective data schema stored in Local Storage.
 
 ```
 {
-"expenses": [
-{
-"date": "2024-12-17",
-"category": "payments",
-"amount": 1
-}
-]
+  "expenses": [{
+    "date": "2024-12-17",
+    "category": "payments",
+    "amount": 1
+    }
+    ]
 }
 ```
