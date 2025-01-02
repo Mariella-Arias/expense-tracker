@@ -8,6 +8,65 @@ The Expense Tracker App is a client-side Javascript application implementing Obj
 
 The application allows users to manage their expenses through CRUD operations, with all data persisted in the browser's Local Storage. Key features include managing expense records, categorizing them, and providing a date-based filtering system. Expenses are stored locally, and the app dynamically updates the UI based on user interactions.
 
+## Features
+
+- Track expenses with date, category, and amount
+- Filter by date and/or category functionality
+- Data persistence using Local Storage
+- Responsive design for all devices
+
+## Getting Started
+
+### Dependencies
+
+Before installing and running the Expense Tracker App, ensure that you have the following installed:
+
+Node.js:
+This application requires Node.js to run and manage the development environment.
+
+Version: v21.6.1 (or higher)
+You can download and install Node.js from the official website: Node.js.
+
+Operating System:
+The app can run on any operating system that supports Node.js. This includes:
+
+Windows 10 (or higher)
+macOS 10.14+
+Linux (any modern distribution)
+Package Manager:
+The app uses npm (Node Package Manager) for managing dependencies. It is automatically installed when you install Node.js.
+
+### Installing and Executing Program
+
+Follow these steps to get the Expense Tracker app up and running locally:
+
+Clone the repository:
+First, clone the project repository to your local machine. You can do this using the following command in your terminal:
+git clone <repository_url>
+
+Install dependencies:
+Navigate into the project directory and install the required dependencies by running:
+
+```
+npm install
+```
+
+Run the app:
+To start the app, run the following command:
+
+```
+npm start
+```
+
+This will launch a local development server and open the app in your default web browser.
+
+Running Tests:
+To run the tests for the app, use the following command:
+
+```
+npm test
+```
+
 ## Technical Implementation
 
 The project is designed around three core components:
@@ -64,55 +123,3 @@ The application uses a simple yet effective data schema stored in Local Storage.
 }
 ]
 }
-
-## Getting Started
-
-### Dependencies
-
-Before installing and running the Expense Tracker App, ensure that you have the following installed:
-
-Node.js:
-This application requires Node.js to run and manage the development environment.
-
-Version: v21.6.1 (or higher)
-You can download and install Node.js from the official website: Node.js.
-
-Operating System:
-The app can run on any operating system that supports Node.js. This includes:
-
-Windows 10 (or higher)
-macOS 10.14+
-Linux (any modern distribution)
-Package Manager:
-The app uses npm (Node Package Manager) for managing dependencies. It is automatically installed when you install Node.js.
-
-### Installing and Executing Program
-
-Follow these steps to get the Expense Tracker app up and running locally:
-
-Clone the repository:
-First, clone the project repository to your local machine. You can do this using the following command in your terminal:
-git clone <repository_url>
-
-Install dependencies:
-Navigate into the project directory and install the required dependencies by running:
-
-```
-npm install
-```
-
-Run the app:
-To start the app, run the following command:
-
-```
-npm start
-```
-
-This will launch a local development server and open the app in your default web browser.
-
-Running Tests:
-To run the tests for the app, use the following command:
-
-```
-npm test
-```
