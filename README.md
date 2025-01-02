@@ -114,6 +114,7 @@ The project is designed around three core components:
 
 The application uses a simple yet effective data schema stored in Local Storage. Expenses data is stored as an array of objects, each containing date, category, and amount.
 
+```
 {
 "expenses": [
 {
@@ -123,3 +124,4 @@ The application uses a simple yet effective data schema stored in Local Storage.
 }
 ]
 }
+```
