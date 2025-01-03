@@ -48,7 +48,7 @@ npm start
 
 This will launch a local development server and open the app in your default web browser.
 
-Running Tests:
+#### Running Tests:
 To run the tests for the app, use the following command:
 
 ```
