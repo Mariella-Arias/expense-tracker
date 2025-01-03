@@ -11,7 +11,7 @@ The application allows users to manage their expenses through CRUD operations, w
 ## Features
 
 - Track expenses with date, category, and amount
-- Filter by date and/or category functionality
+- Filter by date and/or category 
 - Data persistence using Local Storage
 - Responsive design for all devices
 
@@ -21,7 +21,7 @@ The application allows users to manage their expenses through CRUD operations, w
 
 Before installing and running the Expense Tracker App, ensure that you have the following installed:
 
-- Node.js (v21.6.1 or higher) You can download and install Node.js from the official website: [Node.js](https://nodejs.org)
+- Node.js (v21.6.1 or higher). You can download and install Node.js from the official website: [Node.js](https://nodejs.org)
 - npm (automatically installed with Node.js)
 
 ### Installing and Executing Program
