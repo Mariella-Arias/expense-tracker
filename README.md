@@ -30,7 +30,10 @@ Follow these steps to get the Expense Tracker app up and running locally:
 
 #### 1. Clone the repository:
 First, clone the project repository to your local machine. You can do this using the following command in your terminal:
+
+```
 git clone <repository_url>
+```
 
 #### 2. Install dependencies:
 Navigate into the project directory and install the required dependencies by running:
