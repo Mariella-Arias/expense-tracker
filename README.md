@@ -113,7 +113,7 @@ The project is designed around three core components:
 
 ## Data Architecture
 
-The application uses a simple yet effective data schema stored in Local Storage. Expenses data is stored as an array of objects, each containing date, category, and amount.
+The application uses a simple yet effective data schema stored in Local Storage. The expenses data is stored as an array of objects, with each object containing date, category, and amount.
 
 ```
 {
