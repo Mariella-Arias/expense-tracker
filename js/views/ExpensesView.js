@@ -113,12 +113,14 @@ class ExpensesView {
     const cleanTooltip = () => {
       if (tooltip) tooltip.remove();
       window.removeEventListener("click", handleOutsideClick);
+      window.removeEventListener("touchend", handleOutsideClick);
       listEl.removeEventListener("scroll", cleanTooltip);
       window.removeEventListener("resize", cleanTooltip);
     };
 
     setTimeout(() => {
       window.addEventListener("click", handleOutsideClick);
+      window.addEventListener("touchend", handleOutsideClick);
     }, 0);
 
     const listEl = document.getElementById("expense-list");
@@ -275,11 +277,13 @@ class ExpensesView {
 
       cleanEditableRow();
     });
+
     const cleanEditableRow = () => {
       if (editableRow) {
         editableRow.remove();
       }
       window.removeEventListener("click", removeEditableRow);
+      window.removeEventListener("touchend", removeEditableRow);
     };
 
     const removeEditableRow = (e) => {
@@ -289,6 +293,7 @@ class ExpensesView {
     };
 
     window.addEventListener("click", removeEditableRow);
+    window.addEventListener("touchend", removeEditableRow);
   }
 
   renderFilterDropdown(filters, setFilter, clearFilters) {
@@ -338,6 +343,7 @@ class ExpensesView {
       const cleanDropdown = () => {
         if (form) form.remove();
         window.removeEventListener("click", handleClickOutsideDropdown);
+        window.removeEventListener("touchend", handleClickOutsideDropdown);
         window.removeEventListener("resize", cleanDropdown);
       };
 
@@ -349,6 +355,7 @@ class ExpensesView {
 
       setTimeout(() => {
         window.addEventListener("click", handleClickOutsideDropdown);
+        window.addEventListener("touchend", handleClickOutsideDropdown);
       }, 0);
       window.addEventListener("resize", cleanDropdown);
 
