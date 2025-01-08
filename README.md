@@ -2,6 +2,8 @@
 
 A lightweight vanilla Javascript application for tracking personal expenses.
 
+![Screenshot of Expense Tracker](assets/images/new-expense.png)
+
 ## Project Description
 
 The Expense Tracker App is a client-side Javascript application implementing Object-Oriented Programming (OOP) principles and following an MVC architecture to promote modularity and scalability.
