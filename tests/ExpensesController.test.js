@@ -40,7 +40,9 @@ describe("Expenses Controller", function () {
     const selectedDate = document.getElementById("selected-date");
     const dateInput = document.getElementById("date-input");
 
-    const today = ExpensesController.getCalendarDate(new Date());
+    const today = ExpensesController.getCalendarDate(
+      new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+    );
     expect(selectedDate.getAttribute("value")).to.equal(today);
     expect(selectedDate.getAttribute("max")).to.equal(today);
     expect(dateInput.getAttribute("max")).to.equal(today);
