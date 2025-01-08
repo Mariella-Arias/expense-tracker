@@ -15,6 +15,8 @@ The application allows users to manage their expenses through CRUD operations, w
 - Data persistence using Local Storage
 - Responsive design for all devices
 
+[▶️ Watch Demo Video](https://mariella-arias.github.io/assets/videos/expense-tracker-demo.mp4)
+
 ## Getting Started
 
 ### Dependencies
@@ -112,6 +114,7 @@ The application uses a simple yet effective data schema stored in Local Storage.
     "category": "payments",
     "amount": 1
     }
-    ]
+    ...
+  ]
 }
 ```
