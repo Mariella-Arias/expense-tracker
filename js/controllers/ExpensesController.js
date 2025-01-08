@@ -41,7 +41,10 @@ class ExpensesController {
   }
 
   #getToday() {
-    return ExpensesController.getCalendarDate(new Date());
+    const todayInUtc = new Date(
+      Date.now() - new Date().getTimezoneOffset() * 60000
+    );
+    return ExpensesController.getCalendarDate(todayInUtc);
   }
 
   #handleOpenModal() {
